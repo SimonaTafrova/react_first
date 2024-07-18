@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "first-react",
+    "scheme": "first-react",
     "slug": "first-react",
     "version": "1.0.0",
     "orientation": "portrait",
