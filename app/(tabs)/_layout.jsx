@@ -21,7 +21,10 @@ const TabIcon = ({icon, color, name, focused}) => {
 const TabsLayout = () => {
   return (
     <>
-    <Tabs>
+    <Tabs
+    screenOptions={{
+        tabBarShowLabel: false
+    }}>
         <Tabs.Screen
         name="home"
         options={{
