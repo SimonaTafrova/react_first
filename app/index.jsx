@@ -8,7 +8,7 @@ export default function App() {
       <Text className="text-3xl font-pblack">First React
       </Text>
       <StatusBar style="auto" />
-      <Link href="profile" style={{ color: 'blue'}}>Go to profile</Link>
+      <Link href="home" style={{ color: 'blue'}}>Home</Link>
     </View>
   );
 }
