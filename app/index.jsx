@@ -19,7 +19,13 @@ export default function App() {
                 className="max-w-[380px] w-full h-[300px]"
                 resizeMode='contain'
                 />
-              
+                <View className="relative mt-5">
+                    <Text className="text-3xl text-white font-bold text-center">
+                        Discover endless possibilities with {' '}
+                        <Text className="text-secondary-200">Aora!</Text>
+                    </Text>
+
+                </View>
 
             </View>
         </ScrollView>
