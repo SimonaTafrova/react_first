@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { useState} from 'react'
-import { images, icons } from '../../constants'
+import { images, icons } from '../constants'
 
 const FormField = ({title, value, placeholder, handleChangeText, otherStyles, ...props}) => {
   const [showPassword, setshowPassword] = useState(false)
