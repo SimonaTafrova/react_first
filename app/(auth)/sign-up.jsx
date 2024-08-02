@@ -1,22 +1,26 @@
-import { Text, View, ScrollView, Image } from 'react-native'
+import { Text, View, ScrollView, Image, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useState } from 'react'
 import { images } from '../../constants'
-import FormField from '../components/FormField'
-import CustomButton from '../components/CustomButton'
+import CustomButton from '../../components/CustomButton'
+import FormField from '../../components/FormField'
 import { Link } from 'expo-router'
+import { createUser } from '../../lib/appwrite'
+import { Redirect, router } from 'expo-router';
 
 
 const SignUp = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [form, setform] = useState({
     username: '',
     email: '',
     password: '',
     
   })
-  const submit = () => {}
+  const submit = async () => {
+  }
 
-  const [isSubmitting, setisSubmitting] = useState(false)
+
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView>
