@@ -34,7 +34,7 @@ export default function App() {
 
                 </View>
 
-                <Text className="text-sm font-pregular text-gray-100 mt-7 text-center">Make your health journey easy and accessible!
+                <Text className="text-sm font-pregular text-gray-100 mt-7 text-center">Embark on your health journey the easy way!
                 </Text>
 
                 <CustomButton
