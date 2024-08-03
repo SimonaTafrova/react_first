@@ -12,29 +12,29 @@ export default function App() {
         <ScrollView contentContainerStyle={{ height: '100%'}}>
             <View className="w-full justify-center items-center min-h-[85vh] px-4">
                 <Image
-                source={images.logo}
-                className="w-[130px] h-[84px]"
+                source={images.logo2}
+                className="w-[200px] h-[150px]"
                 resizeMode="contain"
                 />
                 <Image
-                source={images.cards}
-                className="max-w-[380px] w-full h-[300px]"
+                source={images.logobig}
+                className="max-w-[500px] w-full h-[350px]"
                 resizeMode='contain'
                 />
                 <View className="relative mt-5">
                     <Text className="text-3xl text-white font-bold text-center">
-                        Discover endless possibilities with {' '}
-                        <Text className="text-secondary-200">Aora!</Text>
+                        Keep tracks of your diabetes with {' '}
+                        <Text className="text-secondary-200">myMedical!</Text>
                     </Text>
                     <Image 
                     source={images.path}
-                    className="w-[136px] h-[15px] absolute -bottom-2 -right-8"
+                    className="w-[150px] h-[15px] absolute -bottom-2 -right-8"
                     resizeMode='contain'
                     />
 
                 </View>
 
-                <Text className="text-sm font-pregular text-gray-100 mt-7 text-center">Where creativity meets innovation!
+                <Text className="text-sm font-pregular text-gray-100 mt-7 text-center">Make your health journey easy and accessible!
                 </Text>
 
                 <CustomButton
