@@ -7,5 +7,6 @@ import logo2 from "../assets/images/logo2.png";
 import logoSmall from "../assets/images/logo-small.png";
 import logobig from "../assets/images/big-logo.png";
 import empty from "../assets/images/empty.png";
+import insulin from "../assets/images/insulin.png";
 
-export default { profile, thumbnail, cards, path, logo, logo2, logoSmall,logobig, empty };
+export default { profile, thumbnail, cards, path, logo, logo2, logoSmall,logobig, empty, insulin };

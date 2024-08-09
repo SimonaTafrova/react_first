@@ -3,16 +3,18 @@ import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../constants'
 import SearchInput from '../../components/SearchInput'
+import Actions from '../../components/Actions'
+import EmptyState from '../../components/EmptyState'
 
 
 const Home = () => {
   return (
-    <SafeAreaView className="bg-primary">
+    <SafeAreaView className="bg-primary h-full">
       <FlatList
-      data = {[{id:1}, {id:2}, {id:3}]}
+      data = {[{id:1, text: "Call GP"}, {id:2, text: "Collect Prescription"}, {id:3, text : "Buy CGM Sensord"}] ?? []}
       keyExtractor={(item) => item.$id}
       renderItem={({item}) => (
-        <Text className = "text-3xl">{item.id}</Text>
+        <Text className = "text-3xl text-white">{item.text}</Text>
       )}
       ListHeaderComponent={() => (
         <View className="my-6 px-4 space-y-6">
@@ -37,16 +39,21 @@ const Home = () => {
           </View>
           <SearchInput />
 
+          
+
           <View className="w-full flex-1 pt-5 pb-8">
             <Text className="text-gray-100 text-lg font-pregular mb-3 text-center">
               Choose what you want to update
 
             </Text>
 
+            <Actions posts={[{id:1}, {id:2}, {id:3}] ?? []} />
+
           </View>
 
         </View>
       )}
+   
       />
     </SafeAreaView>
     
