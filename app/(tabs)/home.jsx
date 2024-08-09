@@ -52,6 +52,12 @@ const Home = () => {
           </View>
 
         </View>
+        
+      )}
+      ListEmptyComponent={() => (
+        <EmptyState
+        title="No actions created yet"
+        />
       )}
    
       />
