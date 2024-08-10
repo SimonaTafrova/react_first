@@ -81,6 +81,22 @@ const TabsLayout = () => {
             )
         }}
             />
+             <Tabs.Screen
+        name="alerts"
+        options={{
+            title: 'Alerts',
+            headerShown: false,
+            tabBarIcon: ({color, focused}) => (
+                <TabIcon
+                icon={icons.plus}
+                color={color}
+                name="Alerts"
+                focused={focused}
+                />
+
+            )
+        }}
+            />
             <Tabs.Screen
         name="profile"
         options={{
