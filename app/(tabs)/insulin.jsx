@@ -4,7 +4,7 @@ import React from 'react'
 const Insulin  = () => {
   return (
     <View>
-      <Text> Insulin </Text>
+      <Text> Insulin Log </Text>
     </View>
   )
 }
