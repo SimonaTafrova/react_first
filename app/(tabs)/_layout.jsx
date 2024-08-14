@@ -58,7 +58,7 @@ const TabsLayout = () => {
                 <TabIcon
                 icon={icons.bookmark}
                 color={color}
-                name="Insulin"
+                name="Insulin log"
                 focused={focused}
                 />
 
