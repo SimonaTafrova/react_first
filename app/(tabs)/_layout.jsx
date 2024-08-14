@@ -74,7 +74,7 @@ const TabsLayout = () => {
                 <TabIcon
                 icon={icons.plus}
                 color={color}
-                name="Sensors"
+                name="CGM Sensors"
                 focused={focused}
                 />
 
