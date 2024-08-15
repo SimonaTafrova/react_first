@@ -8,5 +8,7 @@ import logoSmall from "../assets/images/logo-small.png";
 import logobig from "../assets/images/big-logo.png";
 import empty from "../assets/images/empty.png";
 import insulin from "../assets/images/insulin.png";
+import sensor from "../assets/images/sensor.png";
+import prescription from "../assets/images/prescription.png";
 
-export default { profile, thumbnail, cards, path, logo, logo2, logoSmall,logobig, empty, insulin };
+export default { profile, thumbnail, cards, path, logo, logo2, logoSmall,logobig, empty, insulin, sensor, prescription };
