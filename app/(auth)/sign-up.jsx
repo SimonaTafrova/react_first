@@ -7,9 +7,11 @@ import FormField from '../../components/FormField'
 import { Link } from 'expo-router'
 import { createUser } from '../../lib/appwrite'
 import { Redirect, router } from 'expo-router';
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 
 const SignUp = () => {
+  const { setUser, setIsLogged } = useGlobalContext();
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [form, setform] = useState({
     username: '',
@@ -25,7 +27,9 @@ const SignUp = () => {
     setIsSubmitting(true);
 
     try {
-      const result = await createUser(form.email, form.password, form.username)    
+      const result = await createUser(form.email, form.password, form.username)  
+      setUser(result);
+      setIsLogged(true);  
       router.replace('/home')  
     } catch (error) {
       Alert.alert('Error', error.message)
@@ -34,7 +38,7 @@ const SignUp = () => {
       setIsSubmitting(false)
     }
 
-    createUser();
+    
   }
 
 
