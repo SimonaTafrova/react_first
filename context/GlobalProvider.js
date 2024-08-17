@@ -5,18 +5,18 @@ const GlobalContext = createContext();
 export const useGlobalContext = () => useContext(GlobalContext);
 
 const GlobalProvider = ({children }) => {
-    const [isLoggedIn, setisLoggedIn] = useState(false)
+    const [isLogged, setIsLogged] = useState(false)
     const [user, setUser] = useState(null)
-    const [isLoading, setisLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         getCurrentUser()
         .then((res) => {
             if(res){
-                setisLoggedIn(true);
+                setIsLogged(true);
                 setUser(res);
             } else {
-                setisLoggedIn(false);
+                setIsLogged(false);
                 setUser(null);
             }
         })
@@ -24,14 +24,14 @@ const GlobalProvider = ({children }) => {
             console.log(error);
         })
         .finally(() => {
-            setisLoading(false);
+            setIsLoading(false);
         })
     })
     return (
         <GlobalContext.Provider
         value = {{
-            isLoggedIn,
-            setisLoggedIn,
+            isLogged,
+            setIsLogged,
             user,
             setUser,
             isLoading

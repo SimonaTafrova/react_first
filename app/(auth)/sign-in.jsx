@@ -4,11 +4,14 @@ import { useState } from 'react'
 import { images } from '../../constants'
 import CustomButton from '../../components/CustomButton'
 import FormField from '../../components/FormField'
-import { Link } from 'expo-router'
-import { signIn } from '../../lib/appwrite'
+import { Link, router } from 'expo-router'
+import { signIn, getCurrentUser } from '../../lib/appwrite'
+import { useGlobalContext } from "../../context/GlobalProvider"
 
 
 const SignIn = () => {
+  const { setUser, setIsLogged } = useGlobalContext();
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [form, setform] = useState({
     email: '',
     password: '',
@@ -22,7 +25,10 @@ const SignIn = () => {
     setIsSubmitting(true);
 
     try {
-      const result = await signIn(form.email, form.password)    
+      await signIn(form.email, form.password);
+      const result = await getCurrentUser();
+      setUser(result);
+      setIsLogged(true);
       router.replace('/home')  
     } catch (error) {
       Alert.alert('Error', error.message)
@@ -34,7 +40,7 @@ const SignIn = () => {
     
   }
 
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView>

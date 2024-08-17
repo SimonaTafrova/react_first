@@ -1,71 +1,115 @@
-import { FlatList, Image, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { images } from '../../constants'
-import SearchInput from '../../components/SearchInput'
-import Actions from '../../components/Actions'
-import EmptyState from '../../components/EmptyState'
-
+import { FlatList, Image, Text, View, RefreshControl, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { images } from '../../constants';
+import SearchInput from '../../components/SearchInput';
+import Actions from '../../components/Actions';
+import EmptyState from '../../components/EmptyState';
+import VideoCard from '../../components/VideoCard';
+import useAppwrite from "../../lib/useAppwrite";
+import { getAllPosts } from "../../lib/appwrite";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 const Home = () => {
+  const { data: posts, refetch } = useAppwrite(getAllPosts);
+  const [refreshing, setRefreshing] = useState(false);
+  const {user} = useGlobalContext();
+
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
+
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <SafeAreaView style={styles.container}>
       <FlatList
-      data = {[{id:1, text: "Call GP"}, {id:2, text: "Collect Prescription"}, {id:3, text : "Buy CGM Sensord"}] ?? []}
-      keyExtractor={(item) => item.$id}
-      renderItem={({item}) => (
-        <Text className = "text-3xl text-white">{item.text}</Text>
-      )}
-      ListHeaderComponent={() => (
-        <View className="my-6 px-4 space-y-6">
-          <View className="justify-between items-start flex-row mb-6">
-            <View className="">
-              <Text className="font-pmedium text-sm text-gray-100">
-                Welcome back
-              </Text>
-              <Text className="text-2xl font-psemibold text-white">
-                Simona!
-              </Text>
+        data={posts}
+        keyExtractor={(item) => item.$id}
+        renderItem={({ item }) => (
+          <VideoCard
+            title={item.title}
+            thumbnail={item.thumbnail}
+            video={item.video}
+          />
+        )}
+        ListHeaderComponent={() => (
+          <View className="flex my-6 px-4 space-y-6">
+            <View className="flex justify-between items-start flex-row mb-6">
+              <View>
+                <Text className="font-pmedium text-sm text-gray-100">
+                  Welcome Back
+                </Text>
+                <Text className="text-2xl font-psemibold text-white">
+                  {user?.username}
+                </Text>
+              </View>
 
+              <View className="mt-1.5">
+                <Image
+                  source={images.logoSmall}
+                  className="w-9 h-10 rounded-md border-2 border-secondary"
+                  resizeMode="contain"
+                />
+              </View>
             </View>
-            <View className="mt-1.5">
-              <Image  
-              source = {images.logoSmall}
-              className="w-9 h-10"
-              resizeMode='contain'/>
-
+            <SearchInput />
+            <View style={styles.actionsContainer}>
+              <Text style={styles.chooseText}>Choose what you want to update</Text>
+              <Actions posts={[]} />
             </View>
-
           </View>
-          <SearchInput />
-
-          
-
-          <View className="w-full flex-1 pt-5 pb-8">
-            <Text className="text-gray-100 text-lg font-pregular mb-3 text-center">
-              Choose what you want to update
-
-            </Text>
-
-            <Actions posts={[{id:1}, {id:2}, {id:3}] ?? []} />
-
-          </View>
-
-        </View>
-        
-      )}
-      ListEmptyComponent={() => (
-        <EmptyState
-        title="No actions created yet"
-        />
-      )}
-   
+        )}
+        ListEmptyComponent={() => (
+          <EmptyState title="No actions created yet" />
+        )}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </SafeAreaView>
-    
-  )
-}
+  );
+};
 
-export default Home
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#000', // Primary background color
+  },
+  headerContainer: {
+    marginVertical: 24,
+    paddingHorizontal: 16,
+  },
+  headerText: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  greetingText: {
+    color: '#fff',
+    fontSize: 14,
+  },
+  usernameText: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  logo: {
+    width: 36,
+    height: 40,
+  },
+  actionsContainer: {
+    paddingTop: 16,
+    paddingBottom: 24,
+  },
+  chooseText: {
+    color: '#ccc',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 12,
+  },
+});
 
-const styles = StyleSheet.create({})
+export default Home;
