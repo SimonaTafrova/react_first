@@ -11,14 +11,17 @@ import { getAllPosts } from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
 
 const Home = () => {
-  const { data: posts, refetch } = useAppwrite(getAllPosts);
+  const { data: posts, refetch, error } = useAppwrite(getAllPosts);
   const [refreshing, setRefreshing] = useState(false);
-  const {user} = useGlobalContext();
-
+  const { user } = useGlobalContext();
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await refetch();
+    try {
+      await refetch();
+    } catch (err) {
+      console.error('Failed to refresh posts:', err);
+    }
     setRefreshing(false);
   };
 
@@ -107,6 +110,11 @@ const styles = StyleSheet.create({
   chooseText: {
     color: '#ccc',
     fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 12,
+  },
+  errorText: {
+    color: 'red',
     textAlign: 'center',
     marginBottom: 12,
   },
