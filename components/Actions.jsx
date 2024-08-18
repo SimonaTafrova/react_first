@@ -1,11 +1,10 @@
-import React, { useState, useRef } from 'react';
-import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image, Animated, Dimensions, Modal,Alert, Pressable, TouchableWithoutFeedback } from 'react-native';
+import React, { useState, useRef, useCallback } from 'react';
+import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image, Animated, Dimensions, Modal, Alert, TouchableWithoutFeedback } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import CustomButton from '../components/CustomButton';
 import { useGlobalContext } from '../context/GlobalProvider';
 import { createInsulinInsertion, createPrescriptionLog } from '../lib/appwrite';
 import { router } from 'expo-router';
-
 import moment from 'moment';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -27,7 +26,9 @@ const unitData = [
 const generatePastDates = (numDays) => {
   const dates = [];
   for (let i = 0; i < numDays; i++) {
-    const date = moment().subtract(i, 'days').format('MMMM D, YYYY'); // Format date
+    const date = moment().subtract(i, 'days').format('MMMM D, YYYY');
+    console.log(date);
+    console.log(i.toString())
     dates.push({ key: i.toString(), value: date });
   }
   return dates;
@@ -57,9 +58,7 @@ const Actions = ({ posts }) => {
   });
   const [prescriptionForm, setPrescriptionForm] = useState({
     time: null,
-
   });
-  const [selectedDate, setSelectedDate] = useState(''); // Track selected date
 
   const quickActions = [
     { id: 'action1', label: 'Log Insulin', imageSource: require('../assets/images/insulin.png'), onPress: () => setInsulinModalVisible(true) },
@@ -70,58 +69,55 @@ const Actions = ({ posts }) => {
 
   const data = [...quickActions, ...posts];
 
+  // Debugging submit functions
   const submitInsulin = async () => {
-    if ((form.type === "") | (form.units === null)) {
+    if (!form.type || !form.units) {
       return Alert.alert("Please provide all fields");
     }
 
     setUploading(true);
     try {
+      console.log("Submitting insulin:", form);
       await createInsulinInsertion({
         ...form,
         userId: user.$id,
         time: new Date(),
       });
 
-      Alert.alert("Success", "Post uploaded successfully");
+      Alert.alert("Success", "Insulin log recorded successfully");
       router.push("/home");
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {
-      setForm({
-        type: "",
-        units: null,
-      });
-
+      setForm({ type: '', units: '' });
       setUploading(false);
+      setInsulinModalVisible(false);
     }
   };
 
   const submitPrescription = async () => {
-    if ((form.time === "")) {
+    if (!prescriptionForm.time) {
       return Alert.alert("Please provide all fields");
     }
 
     setUploading(true);
     try {
+      console.log("Submitting prescription:", prescriptionForm);
       await createPrescriptionLog({
         ...prescriptionForm,
         userId: user.$id,
       });
 
-      Alert.alert("Success", "Post uploaded successfully");
+      Alert.alert("Success", "Prescription log recorded successfully");
       router.push("/home");
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {
-      setForm({
-        time : null
-      });
-
+      setPrescriptionForm({ time: null });
       setUploading(false);
+      setPrescriptionModalVisible(false);
     }
   };
-
 
   const insulinModal = () => (
     <Modal
@@ -134,36 +130,32 @@ const Actions = ({ posts }) => {
         <View style={styles.modalBackground}>
           <TouchableWithoutFeedback>
             <View style={styles.modalView}>
-              {/* Close (X) button */}
               <TouchableOpacity onPress={() => setInsulinModalVisible(false)} style={styles.closeButton}>
                 <Text style={styles.closeButtonText}>X</Text>
               </TouchableOpacity>
 
               <Text style={styles.modalText}>Record Insulin Intake</Text>
 
-              {/* Type Dropdown */}
               <SelectList
                 setSelected={(value) => setForm({ ...form, type: value })}
                 data={typeData}
-                boxStyles={{ backgroundColor: '#161622', borderColor: '#FF8E01', width: '100%' }}
-                inputStyles={{ color: 'white' }}
-                dropdownTextStyles={{ color: 'white' }}
+                boxStyles={styles.dropdownBox}
+                inputStyles={styles.dropdownText}
+                dropdownTextStyles={styles.dropdownText}
               />
 
-              {/* Units Dropdown */}
               <SelectList
                 setSelected={(value) => setForm({ ...form, units: parseInt(value) })}
                 data={unitData}
-                boxStyles={{ backgroundColor: '#161622', borderColor: '#FF8E01', marginTop: 20, width: '100%' }}
-                inputStyles={{ color: 'white' }}
-                dropdownTextStyles={{ color: 'white' }}
+                boxStyles={[styles.dropdownBox, { marginTop: 20 }]}
+                inputStyles={styles.dropdownText}
+                dropdownTextStyles={styles.dropdownText}
               />
 
-              {/* Submit Button */}
               <CustomButton
                 title="Submit"
                 handlePress={submitInsulin}
-                containerStyles={[styles.submitButton]}
+                containerStyles={styles.submitButton}
               />
             </View>
           </TouchableWithoutFeedback>
@@ -183,34 +175,64 @@ const Actions = ({ posts }) => {
         <View style={styles.modalBackground}>
           <TouchableWithoutFeedback>
             <View style={styles.modalView}>
-              {/* Close (X) button */}
               <TouchableOpacity onPress={() => setPrescriptionModalVisible(false)} style={styles.closeButton}>
                 <Text style={styles.closeButtonText}>X</Text>
               </TouchableOpacity>
 
               <Text style={styles.modalText}>Log Prescription</Text>
 
-              {/* Dropdown for past dates */}
               <SelectList
-                setSelected={(value) =>  setPrescriptionForm({ ...form, time: value })}
+                setSelected={(value) => {
+                 
+
+                  let date = pastDatesData.at(value).value
+                
+                  setPrescriptionForm({ ...prescriptionForm, time: date });
+                }}
                 data={pastDatesData}
-                boxStyles={{ backgroundColor: '#161622', borderColor: '#FF8E01', width: '100%' }}
-                inputStyles={{ color: 'white' }}
-                dropdownTextStyles={{ color: 'white' }}
+                boxStyles={styles.dropdownBox}
+                inputStyles={styles.dropdownText}
+                dropdownTextStyles={styles.dropdownText}
               />
 
               <CustomButton
                 title="Submit"
                 handlePress={submitPrescription}
-                containerStyles={[styles.submitButton]}
+                containerStyles={styles.submitButton}
               />
-             
             </View>
           </TouchableWithoutFeedback>
         </View>
       </TouchableWithoutFeedback>
     </Modal>
   );
+
+  const renderItem = useCallback(({ item, index }) => {
+    const inputRange = [
+      (index - 1) * ITEM_SIZE,
+      index * ITEM_SIZE,
+      (index + 1) * ITEM_SIZE,
+    ];
+
+    const scale = scrollX.interpolate({
+      inputRange,
+      outputRange: [0.8, 1, 0.8],
+      extrapolate: 'clamp',
+    });
+
+    return (
+      <View>
+        <QuickActionButton
+          onPress={item.onPress}
+          imageSource={item.imageSource}
+          label={item.label}
+          scale={scale}
+        />
+        {insulinModal()}
+        {prescriptionModal()}
+      </View>
+    );
+  }, [scrollX, insulinModalVisible, prescriptionModalVisible, form, prescriptionForm]);
 
   return (
     <Animated.FlatList
@@ -224,32 +246,7 @@ const Actions = ({ posts }) => {
       contentContainerStyle={{
         paddingHorizontal: (screenWidth - ITEM_SIZE) / 2,
       }}
-      renderItem={({ item, index }) => {
-        const inputRange = [
-          (index - 1) * ITEM_SIZE,
-          index * ITEM_SIZE,
-          (index + 1) * ITEM_SIZE,
-        ];
-
-        const scale = scrollX.interpolate({
-          inputRange,
-          outputRange: [0.8, 1, 0.8],
-          extrapolate: 'clamp',
-        });
-
-        return (
-          <View>
-            <QuickActionButton
-              onPress={item.onPress}
-              imageSource={item.imageSource}
-              label={item.label}
-              scale={scale}
-            />
-            {insulinModal()}
-            {prescriptionModal()}
-          </View>
-        );
-      }}
+      renderItem={renderItem}
       onScroll={Animated.event(
         [{ nativeEvent: { contentOffset: { x: scrollX } } }],
         { useNativeDriver: true }
@@ -324,6 +321,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#FF8E01',
   },
+  dropdownBox: {
+    backgroundColor: '#161622',
+    borderColor: '#FF8E01',
+    width: '100%',
+  },
+  dropdownText: {
+    color: 'white',
+  },
   submitButton: {
     backgroundColor: '#FF8E01',
     marginTop: 20,
@@ -331,9 +336,5 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     alignItems: 'center',
     borderRadius: 10,
-  },
-  selectedDateText: {
-    color: 'white',
-    marginTop: 10,
   },
 });

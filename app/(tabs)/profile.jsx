@@ -7,13 +7,14 @@ import { Image, TouchableOpacity } from "react-native";
 
 import { icons } from "../../constants";
 import useAppwrite from "../../lib/useAppwrite";
-import { getUserPosts, signOut } from "../../lib/appwrite";
+import { getUserPosts, signOut, getAllPrescriptions } from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
 
 
 const Profile = () => {
   const { user, setUser, setIsLogged } = useGlobalContext();
 
+  
 
   const logout = async () => {
     await signOut();
