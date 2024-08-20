@@ -27,8 +27,7 @@ const generatePastDates = (numDays) => {
   const dates = [];
   for (let i = 0; i < numDays; i++) {
     const date = moment().subtract(i, 'days').format('MMMM D, YYYY');
-    console.log(date);
-    console.log(i.toString())
+   
     dates.push({ key: i.toString(), value: date });
   }
   return dates;
