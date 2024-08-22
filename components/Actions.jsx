@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image, Animated, Dimensions, Modal, Alert, TouchableWithoutFeedback } from 'react-native';
+import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image, Animated, Dimensions, Modal, Alert, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import CustomButton from '../components/CustomButton';
 import { useGlobalContext } from '../context/GlobalProvider';
@@ -27,7 +27,7 @@ const generatePastDates = (numDays) => {
   const dates = [];
   for (let i = 0; i < numDays; i++) {
     const date = moment().subtract(i, 'days').format('MMMM D, YYYY');
-   
+  
     dates.push({ key: i.toString(), value: date });
   }
   return dates;
@@ -47,6 +47,7 @@ const QuickActionButton = ({ onPress, imageSource, label, scale }) => (
 const Actions = ({ posts }) => {
   const { user } = useGlobalContext();
   const [uploading, setUploading] = useState(false);
+  const [networkError, setNetworkError] = useState(null); // Added state for network error
   const scrollX = useRef(new Animated.Value(0)).current;
   const ITEM_SIZE = screenWidth * 0.6;
   const [insulinModalVisible, setInsulinModalVisible] = useState(false);
@@ -68,13 +69,14 @@ const Actions = ({ posts }) => {
 
   const data = [...quickActions, ...posts];
 
-  // Debugging submit functions
+  // Enhanced submit function with better error handling and logging
   const submitInsulin = async () => {
     if (!form.type || !form.units) {
       return Alert.alert("Please provide all fields");
     }
 
     setUploading(true);
+    setNetworkError(null);  // Reset network error state before attempting submission
     try {
       console.log("Submitting insulin:", form);
       await createInsulinInsertion({
@@ -86,7 +88,9 @@ const Actions = ({ posts }) => {
       Alert.alert("Success", "Insulin log recorded successfully");
       router.push("/home");
     } catch (error) {
-      Alert.alert("Error", error.message);
+      console.log("[Network Error]", error);  // Improved logging
+      setNetworkError(error.message);  // Capture network error
+      Alert.alert("Network Error", "Failed to log insulin. Please try again.");
     } finally {
       setForm({ type: '', units: '' });
       setUploading(false);
@@ -100,6 +104,7 @@ const Actions = ({ posts }) => {
     }
 
     setUploading(true);
+    setNetworkError(null);  // Reset network error state before attempting submission
     try {
       console.log("Submitting prescription:", prescriptionForm);
       await createPrescriptionLog({
@@ -110,7 +115,9 @@ const Actions = ({ posts }) => {
       Alert.alert("Success", "Prescription log recorded successfully");
       router.push("/home");
     } catch (error) {
-      Alert.alert("Error", error.message);
+      console.log("[Network Error]", error);  // Improved logging
+      setNetworkError(error.message);  // Capture network error
+      Alert.alert("Network Error", "Failed to log prescription. Please try again.");
     } finally {
       setPrescriptionForm({ time: null });
       setUploading(false);
@@ -182,10 +189,7 @@ const Actions = ({ posts }) => {
 
               <SelectList
                 setSelected={(value) => {
-                 
-
                   let date = pastDatesData.at(value).value
-                
                   setPrescriptionForm({ ...prescriptionForm, time: date });
                 }}
                 data={pastDatesData}
@@ -234,106 +238,143 @@ const Actions = ({ posts }) => {
   }, [scrollX, insulinModalVisible, prescriptionModalVisible, form, prescriptionForm]);
 
   return (
-    <Animated.FlatList
-      data={data}
-      keyExtractor={(item) => item.id ?? item.$id}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      snapToAlignment="center"
-      snapToInterval={ITEM_SIZE}
-      decelerationRate="fast"
-      contentContainerStyle={{
-        paddingHorizontal: (screenWidth - ITEM_SIZE) / 2,
-      }}
-      renderItem={renderItem}
-      onScroll={Animated.event(
-        [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-        { useNativeDriver: true }
+    <View style={{ flex: 1 }}>
+      {uploading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#FF8E01" />
+          <Text style={styles.loadingText}>Submitting...</Text>
+        </View>
       )}
-      scrollEventThrottle={16}
-    />
+      {networkError && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>Network Error: {networkError}</Text>
+        </View>
+      )}
+      <Animated.FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id || item.$id}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        snapToInterval={ITEM_SIZE}
+        decelerationRate="fast"
+        bounces={false}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+          { useNativeDriver: true }
+        )}
+      />
+    </View>
   );
 };
 
-export default Actions;
-
 const styles = StyleSheet.create({
   buttonContainer: {
-    width: screenWidth * 0.6,
-    justifyContent: 'center',
     alignItems: 'center',
+    marginHorizontal: 10,
   },
   button: {
-    width: '100%',
-    height: 300,
-    margin: 10,
-    backgroundColor: '#FF8E01',
+    width: screenWidth * 0.5,
+    height: screenWidth * 0.5,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
+    borderRadius: 15,
+    backgroundColor: '#FF8E01',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
   },
   buttonImage: {
-    width: 120,
-    height: 120,
-    marginBottom: 10,
+    width: 60,
+    height: 60,
   },
   buttonLabel: {
-    color: '#161622',
-    fontSize: 16,
-    textAlign: 'center',
+    marginTop: 10,
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
   },
   modalBackground: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
   modalView: {
     width: '80%',
-    backgroundColor: '#161622',
-    borderColor: '#FF8E01',
-    borderWidth: 3,
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: {
-      width: 5,
-      height: 5,
-    },
-    shadowOpacity: 0.9,
-    shadowRadius: 20,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
     elevation: 5,
   },
   closeButton: {
     position: 'absolute',
-    right: 10,
     top: 10,
+    right: 10,
+    padding: 10,
   },
   closeButtonText: {
-    fontSize: 18,
-    fontWeight: 'bold',
     color: '#FF8E01',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
-    color: '#FF8E01',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   dropdownBox: {
-    backgroundColor: '#161622',
-    borderColor: '#FF8E01',
     width: '100%',
+    borderColor: '#FF8E01',
   },
   dropdownText: {
-    color: 'white',
+    fontSize: 16,
   },
   submitButton: {
-    backgroundColor: '#FF8E01',
     marginTop: 20,
-    width: '100%',
-    paddingVertical: 10,
-    alignItems: 'center',
+    backgroundColor: '#FF8E01',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
     borderRadius: 10,
   },
+  loadingContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    zIndex: 1000,
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 18,
+    color: '#FF8E01',
+  },
+  errorContainer: {
+    padding: 10,
+    backgroundColor: '#F8D7DA',
+    borderColor: '#F5C6CB',
+    borderWidth: 1,
+    borderRadius: 10,
+    marginHorizontal: 20,
+    marginBottom: 10,
+  },
+  errorText: {
+    color: '#721C24',
+    fontSize: 16,
+    textAlign: 'center',
+  },
 });
+
+export default Actions;
