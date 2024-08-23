@@ -32,7 +32,16 @@ const Insulin = () => {
               </View>
             </View>
             <View>
-           
+            <View className="bg-secondary-200 mt-2 mb-2 rounded-xl min-h-[62px] p-3">
+              <InfoBox
+                type={type}
+                units={units}
+                date={date}
+                containerStyles="mt-0"
+                titleStyles="text-lg"
+              />
+              
+            </View>
             
            
             </View>
