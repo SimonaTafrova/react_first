@@ -58,7 +58,7 @@ const TabsLayout = () => {
                 <TabIcon
                 icon={icons.bookmark}
                 color={color}
-                name="Insulin log"
+                name="Insulin"
                 focused={focused}
                 />
 
@@ -74,7 +74,7 @@ const TabsLayout = () => {
                 <TabIcon
                 icon={icons.plus}
                 color={color}
-                name="CGM Sensors"
+                name="Sensors"
                 focused={focused}
                 />
 
@@ -97,6 +97,7 @@ const TabsLayout = () => {
             )
         }}
             />
+            
             <Tabs.Screen
         name="profile"
         options={{
