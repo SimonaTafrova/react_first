@@ -97,7 +97,22 @@ const TabsLayout = () => {
             )
         }}
             />
-            
+               <Tabs.Screen
+        name="prescriptions"
+        options={{
+            title: 'Prescriptionss',
+            headerShown: false,
+            tabBarIcon: ({color, focused}) => (
+                <TabIcon
+                icon={icons.plus}
+                color={color}
+                name="Rx"
+                focused={focused}
+                />
+
+            )
+        }}
+            />
             <Tabs.Screen
         name="profile"
         options={{
