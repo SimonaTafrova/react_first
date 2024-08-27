@@ -6,6 +6,7 @@ import InfoBox from '../../components/InfoBox';
 import {getAllInsulinLogs} from '../../lib/appwrite'
 import useAppwrite from "../../lib/useAppwrite";
 import { useState } from 'react';
+import { images } from '../../constants';
 
 const Insulin = () => {
   
@@ -35,9 +36,10 @@ const Insulin = () => {
        renderItem={({ item }) => (
         <View className="bg-secondary-200 mt-2 mb-2 rounded-xl min-h-[62px] p-3">
         <InfoBox
-          type={item.type == 1 ? "Novorapid" : "Levemir"}
-          units={item.units}
+          textcontent={item.type == 1 ? `NovoRapid - ${item.units} units` : `Levemir - ${item.units} units`}
+          
           date={item.date}
+          imagesource={images.insulin}
           containerStyles="mt-0"
           titleStyles="text-lg"
         />
