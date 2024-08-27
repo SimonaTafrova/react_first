@@ -3,13 +3,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useGlobalContext } from "../../context/GlobalProvider";
 import EmptyState from '../../components/EmptyState';
 import InfoBox from '../../components/InfoBox';
-import {getAllPrescriptions} from '../../lib/appwrite'
+import {getLastFivePrescriptions} from '../../lib/appwrite'
 import useAppwrite from "../../lib/useAppwrite";
 import { useState } from 'react';
-
+import { images } from '../../constants';
 const Prescriptions = () => {
   
-  const { data: posts, refetch, error } = useAppwrite(getAllPrescriptions);
+  const { data: posts, refetch, error } = useAppwrite(getLastFivePrescriptions);
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useGlobalContext();
 
@@ -33,7 +33,8 @@ const Prescriptions = () => {
        renderItem={({ item }) => (
         <View className="bg-secondary-200 mt-2 mb-2 rounded-xl min-h-[62px] p-3">
         <InfoBox
-          date={item.date}
+          textcontent={item.time}
+          imagesource={images.prescription}
           containerStyles="mt-0"
           titleStyles="text-lg"
         />
