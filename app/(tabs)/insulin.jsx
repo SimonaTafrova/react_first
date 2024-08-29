@@ -24,9 +24,7 @@ const Insulin = () => {
     setRefreshing(false);
   };
 
-  const type = "Novorapid";
-  const units = "2";
-  const date = "11.12.2024";
+
 
   return (
     <SafeAreaView className="flex-1 bg-black">
