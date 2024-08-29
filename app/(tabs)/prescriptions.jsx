@@ -49,7 +49,7 @@ const Prescriptions = () => {
                   {user?.username}
                 </Text>
                 <Text className="text-2xl font-semibold text-secondary">
-                  Here are your most recent prescription collections
+                  Here are your 5 most recent prescription collections
                 </Text>
               </View>
             </View>
