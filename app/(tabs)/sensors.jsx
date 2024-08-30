@@ -41,7 +41,12 @@ const Sensors = () => {
             
           />
 
-
+            <CustomButton
+            title="Submit"
+            handlePress={submit}
+            containerStyles="mt-7"
+            isLoading={isSubmitting} />
+                <Image source={images.sensor} resizeMode='contain' className="w-[715px] h-[175px] "/>
           </View>
     </ScrollView>
     </SafeAreaView>
