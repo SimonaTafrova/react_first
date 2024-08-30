@@ -27,7 +27,22 @@ const Sensors = () => {
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView>
-      
+      <View className="w-full justify-center min-h-[85vh] px-4 my-6">
+ 
+          <Text className="text-2xl text-white text-semibold mt-10 font-psemibold"> Please select the amount of sensors you currently own</Text>
+          
+          <FormField
+            title="Sensors"
+            value= {form.sensors}
+            handleChangeText = {(e) => setform({ ...form,
+              sensors: e
+            })}
+            otherStyles="mt-7"
+            
+          />
+
+
+          </View>
     </ScrollView>
     </SafeAreaView>
   );
