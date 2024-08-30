@@ -27,7 +27,27 @@ const Sensors = () => {
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView>
-      
+      <View className="w-full justify-center min-h-[85vh] px-4 my-6">
+ 
+          <Text className="text-2xl text-white text-semibold mt-10 font-psemibold"> Please select the amount of sensors you currently own</Text>
+          
+          <FormField
+            title="Sensors"
+            value= {form.sensors}
+            handleChangeText = {(e) => setform({ ...form,
+              sensors: e
+            })}
+            otherStyles="mt-7"
+            
+          />
+
+            <CustomButton
+            title="Submit"
+            handlePress={submit}
+            containerStyles="mt-7"
+            isLoading={isSubmitting} />
+                <Image source={images.sensor} resizeMode='contain' className="w-[715px] h-[175px] "/>
+          </View>
     </ScrollView>
     </SafeAreaView>
   );
