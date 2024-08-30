@@ -36,7 +36,7 @@ const Insulin = () => {
         <InfoBox
           textcontent={item.type == 1 ? `NovoRapid - ${item.units} units` : `Levemir - ${item.units} units`}
           
-          date={item.date}
+          date={item.time}
           imagesource={images.insulin}
           containerStyles="mt-0"
           titleStyles="text-lg"
