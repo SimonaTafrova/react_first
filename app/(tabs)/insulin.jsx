@@ -34,7 +34,7 @@ const Insulin = () => {
        renderItem={({ item }) => (
         <View className="bg-secondary-200 mt-2 mb-2 rounded-xl min-h-[62px] p-3">
         <InfoBox
-          textcontent={item.type == 1 ? `NovoRapid - ${item.units} units` : `Levemir - ${item.units} units`}
+          textcontent={item.type == 1 ? `Levemir - ${item.units} units` : `Levemir - ${item.units} units`}
           
           date={item.time}
           imagesource={images.insulin}
