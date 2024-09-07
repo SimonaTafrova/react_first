@@ -3,13 +3,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useGlobalContext } from "../../context/GlobalProvider";
 import EmptyState from '../../components/EmptyState';
 import InfoBox from '../../components/InfoBox';
-import {getLastFivePrescriptions} from '../../lib/appwrite'
+import {getLastTenPrescriptions} from '../../lib/appwrite'
 import useAppwrite from "../../lib/useAppwrite";
 import { useState } from 'react';
 import { images } from '../../constants';
 const Prescriptions = () => {
   
-  const { data: posts, refetch, error } = useAppwrite(getLastFivePrescriptions);
+  const { data: posts, refetch, error } = useAppwrite(getLastTenPrescriptions);
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useGlobalContext();
 
