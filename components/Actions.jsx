@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image, Animated, Di
 import { SelectList } from 'react-native-dropdown-select-list';
 import CustomButton from '../components/CustomButton';
 import { useGlobalContext } from '../context/GlobalProvider';
-import { createInsulinInsertion, createPrescriptionLog } from '../lib/appwrite';
+import { createInsulinInsertion, createPrescriptionLog, updateSensorsCount } from '../lib/appwrite';
 import { router } from 'expo-router';
 import moment from 'moment';
 
@@ -61,7 +61,7 @@ const Actions = ({ posts }) => {
 
   const quickActions = [
     { id: 'action1', label: 'Log Insulin', imageSource: require('../assets/images/insulin.png'), onPress: () => setInsulinModalVisible(true) },
-    { id: 'action2', label: 'Start Sensor', imageSource: require('../assets/images/sensor.png'), onPress: () => console.log('Start Sensor') },
+    { id: 'action2', label: 'Start Sensor', imageSource: require('../assets/images/sensor.png'), onPress: () => {submitStartedSensor()} },
     { id: 'action3', label: 'Log Prescription', imageSource: require('../assets/images/prescription.png'), onPress: () => setPrescriptionModalVisible(true) },
     { id: 'action4', label: 'Insulin Insertions', imageSource: require('../assets/images/insulin.png'), onPress: () => console.log('Insulin Insertions') },
   ];
@@ -93,6 +93,15 @@ const Actions = ({ posts }) => {
       setInsulinModalVisible(false);
     }
   };
+
+  const submitStartedSensor = async () => {
+    try{
+      await updateSensorsCount();
+      Alert.alert("Success", "Sensors started successfully")
+    }catch (error) {
+      Alert.alert("Error", error.message);
+    }
+  }
 
   const submitPrescription = async () => {
     if (!prescriptionForm.time) {

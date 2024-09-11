@@ -11,11 +11,11 @@ import { getUserPosts, signOut, getAllPrescriptions } from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import FormField from '../../components/FormField';
 import CustomButton from '../../components/CustomButton';
-import { setSensorsCount } from '../../lib/appwrite';
+import { setSensorsCount, getCurrentUser } from '../../lib/appwrite';
 
 
 const Sensors = () => {
-  const { user} = useGlobalContext();
+  const { user, setUser} = useGlobalContext();
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [form, setForm] = useState({
     sensors: '',
@@ -29,6 +29,8 @@ const Sensors = () => {
 
     try {
       await setSensorsCount(form);
+      const result = await getCurrentUser();
+      setUser(result);
       Alert.alert("Success", "Sensor count recorded successfully");
     } catch (error) {
       Alert.alert('Error', error.message)
@@ -66,6 +68,9 @@ const Sensors = () => {
             containerStyles="mt-7"
             isLoading={isSubmitting} />
                 <Image source={images.sensor} resizeMode='contain' className="w-[715px] h-[175px] "/>
+                <Text className="text-xl text-white text-semibold mt-10 font-psemibold"> You currently have the following amount of sensors available: {user.sensors}</Text>
+
+          
           </View>
     </ScrollView>
     </SafeAreaView>
