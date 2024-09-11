@@ -11,15 +11,34 @@ import { getUserPosts, signOut, getAllPrescriptions } from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import FormField from '../../components/FormField';
 import CustomButton from '../../components/CustomButton';
+import { updateSensorsCount } from '../../lib/appwrite';
 
 
 const Sensors = () => {
   const { user} = useGlobalContext();
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [form, setform] = useState({
+  const [form, setForm] = useState({
     sensors: '',
   })
-  const submit = () => {}
+  const submit = async () => {
+    if(!form.sensors){ 
+      Alert.alert('Error', 'Please fill in all the fields')
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      await updateSensorsCount(form);
+      Alert.alert("Success", "Sensor count recorded successfully");
+    } catch (error) {
+      Alert.alert('Error', error.message)
+      
+    } finally {
+      setForm({ sensors : '' });
+      setIsSubmitting(false);
+    }
+
+  }
 
   
 
@@ -34,7 +53,7 @@ const Sensors = () => {
           <FormField
             title="Sensors"
             value= {form.sensors}
-            handleChangeText = {(e) => setform({ ...form,
+            handleChangeText = {(e) => setForm({ ...form,
               sensors: e
             })}
             otherStyles="mt-7"
