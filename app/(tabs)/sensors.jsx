@@ -11,7 +11,7 @@ import { getUserPosts, signOut, getAllPrescriptions } from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import FormField from '../../components/FormField';
 import CustomButton from '../../components/CustomButton';
-import { updateSensorsCount } from '../../lib/appwrite';
+import { setSensorsCount } from '../../lib/appwrite';
 
 
 const Sensors = () => {
@@ -28,7 +28,7 @@ const Sensors = () => {
     setIsSubmitting(true);
 
     try {
-      await updateSensorsCount(form);
+      await setSensorsCount(form);
       Alert.alert("Success", "Sensor count recorded successfully");
     } catch (error) {
       Alert.alert('Error', error.message)
