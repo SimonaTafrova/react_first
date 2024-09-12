@@ -24,7 +24,23 @@ const Insulin = () => {
     setRefreshing(false);
   };
 
+  const formatTime = (time) => {
+    let date = new Date(time);
+    let hour = formatElements(date.getHours());
+    let dateEl = formatElements(date.getDate());
+    let month = formatElements(date.getMonth()+1)
+    let minutes = formatElements(date.getMinutes());
+    
+    return `${hour}:${minutes} - ${dateEl}/${month}/${date.getFullYear()}`
+  }
 
+  const formatElements = (element) => {
+    if(element < 10){
+      return `0${element}`
+    } else {
+      return element;
+    }
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-black">
@@ -36,7 +52,7 @@ const Insulin = () => {
         <InfoBox
           textcontent={item.type == 1 ? `NovoRapid - ${item.units} units` : `Levemir - ${item.units} units`}
           
-          date={item.time}
+          date={formatTime(item.time)}
           imagesource={images.insulin}
           containerStyles="mt-0"
           titleStyles="text-lg"
