@@ -24,6 +24,15 @@ const Insulin = () => {
     setRefreshing(false);
   };
 
+  const formatTime = (time) => {
+    let date = new Date(time);
+    let hour = formatElements(date.getHours());
+    let minutes = date.getMinutes();
+    if(date.getMinutes() < 10){
+      minutes = `0${date.getMinutes()}`
+    }
+    return `${date.getHours()}:${minutes} - ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+  }
 
 
   return (
@@ -36,7 +45,7 @@ const Insulin = () => {
         <InfoBox
           textcontent={item.type == 1 ? `NovoRapid - ${item.units} units` : `Levemir - ${item.units} units`}
           
-          date={item.time}
+          date={formatTime(item.time)}
           imagesource={images.insulin}
           containerStyles="mt-0"
           titleStyles="text-lg"
