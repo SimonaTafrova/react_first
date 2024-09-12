@@ -27,13 +27,20 @@ const Insulin = () => {
   const formatTime = (time) => {
     let date = new Date(time);
     let hour = formatElements(date.getHours());
-    let minutes = date.getMinutes();
-    if(date.getMinutes() < 10){
-      minutes = `0${date.getMinutes()}`
-    }
-    return `${date.getHours()}:${minutes} - ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+    let dateEl = formatElements(date.getDate());
+    let month = formatElements(date.getMonth()+1)
+    let minutes = formatElements(date.getMinutes());
+    
+    return `${hour}:${minutes} - ${dateEl}/${month}/${date.getFullYear()}`
   }
 
+  const formatElements = (element) => {
+    if(element < 10){
+      return `0${element}`
+    } else {
+      return element;
+    }
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-black">
