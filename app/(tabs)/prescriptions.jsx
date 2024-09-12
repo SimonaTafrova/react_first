@@ -3,13 +3,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useGlobalContext } from "../../context/GlobalProvider";
 import EmptyState from '../../components/EmptyState';
 import InfoBox from '../../components/InfoBox';
-import {getLastTenPrescriptions} from '../../lib/appwrite'
+import {getLastFivePrescriptions} from '../../lib/appwrite'
 import useAppwrite from "../../lib/useAppwrite";
 import { useState } from 'react';
 import { images } from '../../constants';
 const Prescriptions = () => {
   
-  const { data: posts, refetch, error } = useAppwrite(getLastTenPrescriptions);
+  const { data: posts, refetch, error } = useAppwrite(getLastFivePrescriptions);
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useGlobalContext();
 
@@ -23,6 +23,15 @@ const Prescriptions = () => {
     setRefreshing(false);
   };
 
+  const formatTime = (time) => {
+    let date = new Date(time);
+
+    let dateToReturn = `${date.getDate()} / ${date.getMonth() + 1} / ${date.getFullYear()}`
+
+    return dateToReturn;
+
+  }
+
 
 
   return (
@@ -33,7 +42,7 @@ const Prescriptions = () => {
        renderItem={({ item }) => (
         <View className="bg-secondary-200 mt-2 mb-2 rounded-xl min-h-[62px] p-3">
         <InfoBox
-          textcontent={item.time}
+          textcontent={formatTime(item.time)}
           imagesource={images.prescription}
           containerStyles="mt-0"
           titleStyles="text-lg"
@@ -49,7 +58,7 @@ const Prescriptions = () => {
                   {user?.username}
                 </Text>
                 <Text className="text-2xl font-semibold text-secondary">
-                  Here are your 5 most recent prescription collections
+                  Here are the dates of your 5 or less most recent prescription collections
                 </Text>
               </View>
             </View>
