@@ -6,8 +6,23 @@ import useAppwrite from "../../lib/useAppwrite";
 import { useState } from 'react';
 import React from 'react'
 import { useGlobalContext } from "../../context/GlobalProvider";
+import { getAllAlerts } from '../../lib/appwrite';
 
 const Alerts = () => {
+  const { data: posts, refetch, error } = useAppwrite(getAllAlerts);
+  const [refreshing, setRefreshing] = useState(false);
+  const { user } = useGlobalContext();
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await refetch();
+    } catch (err) {
+      console.error('Failed to refresh posts:', err);
+    }
+    setRefreshing(false);
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-black">
       <FlatList
@@ -42,7 +57,7 @@ const Alerts = () => {
           </View>
         )}
         ListEmptyComponent={() => (
-          <EmptyState title="No insertions created yet" />
+          <EmptyState title="There are no active alerts at the moment!" />
         )}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
