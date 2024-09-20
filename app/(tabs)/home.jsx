@@ -7,12 +7,13 @@ import Actions from '../../components/Actions';
 import EmptyState from '../../components/EmptyState';
 import VideoCard from '../../components/VideoCard';
 import useAppwrite from "../../lib/useAppwrite";
-import { getAllPosts } from "../../lib/appwrite";
+import { getAllPosts , getLastPrescription} from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { run } from '../../lib/alertControler';
 
 const Home = () => {
   const { data: posts, refetch, error } = useAppwrite(getAllPosts);
+  
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useGlobalContext();
   run();

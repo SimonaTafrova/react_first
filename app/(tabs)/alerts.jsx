@@ -6,10 +6,12 @@ import useAppwrite from "../../lib/useAppwrite";
 import { useState } from 'react';
 import React from 'react'
 import { useGlobalContext } from "../../context/GlobalProvider";
-import { getAllAlerts } from '../../lib/appwrite';
+import { getAllAlerts, getLastPrescription } from '../../lib/appwrite';
+
 
 const Alerts = () => {
   const { data: posts, refetch, error } = useAppwrite(getAllAlerts);
+
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useGlobalContext();
 
