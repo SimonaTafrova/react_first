@@ -6,7 +6,7 @@ import useAppwrite from "../../lib/useAppwrite";
 import { useState } from 'react';
 import React from 'react'
 import { useGlobalContext } from "../../context/GlobalProvider";
-import { getAllAlerts, getLastPrescription } from '../../lib/appwrite';
+import { getAllAlerts } from '../../lib/appwrite';
 
 
 const Alerts = () => {
