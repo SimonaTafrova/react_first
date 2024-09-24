@@ -14,6 +14,13 @@ const typeData = [
   { key: '2', value: 'Levemir' },
 ];
 
+const prescriptionType = [
+  { key: '1', value :'Monthly'},
+  { key: '2', value :'Quarterly'},
+  { key: '3', value :'Protocol'},
+
+]
+
 const unitData = [
   { key: '1', value: 1 },
   { key: '2', value: 2 },
@@ -57,6 +64,7 @@ const Actions = ({ posts }) => {
   });
   const [prescriptionForm, setPrescriptionForm] = useState({
     time: null,
+    type: '',
   });
 
   const quickActions = [
@@ -188,6 +196,14 @@ const Actions = ({ posts }) => {
               </TouchableOpacity>
 
               <Text style={styles.modalText}>Log Prescription</Text>
+
+              <SelectList
+                setSelected={(value) => setPrescriptionForm({ ...form, type: value })}
+                data={prescriptionType}
+                boxStyles={styles.dropdownBox}
+                inputStyles={styles.dropdownText}
+                dropdownTextStyles={styles.dropdownText}
+              />
 
               <SelectList
                 setSelected={(value) => {
