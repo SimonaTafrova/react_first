@@ -6,7 +6,7 @@ import useAppwrite from "../../lib/useAppwrite";
 import { useState } from 'react';
 import React from 'react'
 import { useGlobalContext } from "../../context/GlobalProvider";
-import { getAllAlerts, updateAlert } from '../../lib/appwrite';
+import { getAllAlerts, updateAlert, getCurrentUser } from '../../lib/appwrite';
 import { images } from '../../constants';
 
 const Alerts = () => {

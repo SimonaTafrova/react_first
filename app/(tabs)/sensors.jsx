@@ -29,7 +29,7 @@ const Sensors = () => {
 
     try {
       await setSensorsCount(form);
-      const result = await getCurrentUser();
+       const result = await getCurrentUser();
       setUser(result);
       Alert.alert("Success", "Sensor count recorded successfully");
     } catch (error) {
