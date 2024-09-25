@@ -6,14 +6,16 @@ import useAppwrite from "../../lib/useAppwrite";
 import { useState } from 'react';
 import React from 'react'
 import { useGlobalContext } from "../../context/GlobalProvider";
-import { getAllAlerts } from '../../lib/appwrite';
-
+import { getAllAlerts, updateAlert } from '../../lib/appwrite';
+import { images } from '../../constants';
 
 const Alerts = () => {
   const { data: posts, refetch, error } = useAppwrite(getAllAlerts);
 
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useGlobalContext();
+
+
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -33,9 +35,9 @@ const Alerts = () => {
        renderItem={({ item }) => (
         <View className="bg-secondary-200 mt-2 mb-2 rounded-xl min-h-[62px] p-3">
         <InfoBox
-          textcontent={item.type == 1 ? `NovoRapid - ${item.units} units` : `Levemir - ${item.units} units`}
+          textcontent={item.message}
           
-          date={formatTime(item.time)}
+      
           imagesource={images.insulin}
           containerStyles="mt-0"
           titleStyles="text-lg"
