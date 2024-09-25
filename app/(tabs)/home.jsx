@@ -7,8 +7,11 @@ import Actions from '../../components/Actions';
 import EmptyState from '../../components/EmptyState';
 import VideoCard from '../../components/VideoCard';
 import useAppwrite from "../../lib/useAppwrite";
-import { getAllPosts , getLastPrescription} from "../../lib/appwrite";
+import { getAllPosts , getLastPrescription, createAlert} from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import CustomButton from '../../components/CustomButton';
+
+
 
 
 const Home = () => {
@@ -18,6 +21,12 @@ const Home = () => {
   const { user } = useGlobalContext();
 
 
+
+ 
+
+
+
+ 
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -66,6 +75,8 @@ const Home = () => {
               <Text style={styles.chooseText}>Choose what you want to update</Text>
               <Actions posts={[]} />
             </View>
+          
+
           </View>
         )}
         ListEmptyComponent={() => (

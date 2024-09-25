@@ -42,7 +42,8 @@ const Prescriptions = () => {
        renderItem={({ item }) => (
         <View className="bg-secondary-200 mt-2 mb-2 rounded-xl min-h-[62px] p-3">
         <InfoBox
-          textcontent={formatTime(item.time)}
+          textcontent={item.type == 1 ? `Monthly Prescription` : item.type == 2 ? `Quarterly Prescription` : `Protocol`}
+          date={formatTime(item.time)}
           imagesource={images.prescription}
           containerStyles="mt-0"
           titleStyles="text-lg"
