@@ -6,7 +6,7 @@ import useAppwrite from "../../lib/useAppwrite";
 import { useState } from 'react';
 import React from 'react'
 import { useGlobalContext } from "../../context/GlobalProvider";
-import { getAllAlerts, updateAlert } from '../../lib/appwrite';
+import { getAllAlerts, updateAlert, getCurrentUser } from '../../lib/appwrite';
 import { images } from '../../constants';
 
 const Alerts = () => {
@@ -14,8 +14,39 @@ const Alerts = () => {
 
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useGlobalContext();
+  const toDisplay = [];
+
+  console.log(posts.length)
+
+  for(let i=0; i < posts.length; i++){
+    if(posts[i].isValid == 'true'){
+    toDisplay.push(posts[i]);
+    }
+  }
+
+  console.log(toDisplay)
+
+  const countOfSensors = user.sensors;
+  console.log(countOfSensors)
 
 
+  const runAlerts= async () => {
+    if(countOfSensors <= 2){
+      try {
+          console.log("Submitting alert");
+          await updateAlert('true','66f3ee780028d6e85ebe');
+          Alert.alert("Success", "Alert log recorded successfully");
+          
+        } catch (error) {
+          Alert.alert("Error", error.message);
+        } 
+  
+  }
+  
+
+  }
+
+  runAlerts();
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -30,7 +61,7 @@ const Alerts = () => {
   return (
     <SafeAreaView className="flex-1 bg-black">
       <FlatList
-       data={posts}
+       data={toDisplay}
        keyExtractor={(item) => item.$id}
        renderItem={({ item }) => (
         <View className="bg-secondary-200 mt-2 mb-2 rounded-xl min-h-[62px] p-3">
