@@ -1,6 +1,14 @@
 import { StyleSheet, Text, View , Image} from 'react-native'
 import {Tabs, Redirect} from 'expo-router'
 import { icons } from "../../constants";
+import { getAllAlerts } from '../../lib/appwrite';
+import { useGlobalContext } from '../../context/GlobalProvider';
+import useAppwrite from '../../lib/useAppwrite';
+import {useState, useEffect} from 'react'
+
+
+
+
 
 const TabIcon = ({icon, color, name, focused}) => {
     return (
@@ -19,6 +27,11 @@ const TabIcon = ({icon, color, name, focused}) => {
 }
 
 const TabsLayout = () => {
+   
+    const { alerts } = useGlobalContext();
+
+
+
   return (
     <>
     <Tabs
@@ -89,7 +102,7 @@ const TabsLayout = () => {
             tabBarIcon: ({color, focused}) => (
                 <TabIcon
                 icon={icons.plus}
-                color={color}
+                color={alerts ? 'red' : color}
                 name="Alerts"
                 focused={focused}
                 />

@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import EmptyState from '../../components/EmptyState';
 import InfoBox from '../../components/InfoBox';
 import useAppwrite from "../../lib/useAppwrite";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import React from 'react'
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { getAllAlerts, updateAlert, getCurrentUser } from '../../lib/appwrite';
@@ -13,7 +13,8 @@ const Alerts = () => {
   const { data: posts, refetch, error } = useAppwrite(getAllAlerts);
 
   const [refreshing, setRefreshing] = useState(false);
-  const { user } = useGlobalContext();
+  const { user, setUser, setAlerts } = useGlobalContext();
+  
   const toDisplay = [];
 
   console.log(posts.length)
@@ -24,18 +25,28 @@ const Alerts = () => {
     }
   }
 
-  console.log(toDisplay)
+  useEffect(() => {
+    if (toDisplay.length > 0) {
+      setAlerts(true);   // There are active alerts
+    } else {
+      setAlerts(false);  // No active alerts
+    }
+  }, [toDisplay]);  // Run this effect when toDisplay changes
+  
+
 
   const countOfSensors = user.sensors;
-  console.log(countOfSensors)
+
 
 
   const runAlerts= async () => {
     if(countOfSensors <= 2){
       try {
-          console.log("Submitting alert");
+      
           await updateAlert('true','66f3ee780028d6e85ebe');
           Alert.alert("Success", "Alert log recorded successfully");
+        
+     
           
         } catch (error) {
           Alert.alert("Error", error.message);
@@ -43,7 +54,7 @@ const Alerts = () => {
   
   } else {
     try {
-      console.log("Submitting alert");
+     
       await updateAlert('false','66f3ee780028d6e85ebe');
       Alert.alert("Success", "Alert log recorded successfully");
       
