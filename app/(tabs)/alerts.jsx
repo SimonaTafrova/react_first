@@ -41,6 +41,15 @@ const Alerts = () => {
           Alert.alert("Error", error.message);
         } 
   
+  } else {
+    try {
+      console.log("Submitting alert");
+      await updateAlert('false','66f3ee780028d6e85ebe');
+      Alert.alert("Success", "Alert log recorded successfully");
+      
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } 
   }
   
 
