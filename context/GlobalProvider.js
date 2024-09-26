@@ -8,6 +8,7 @@ const GlobalProvider = ({children }) => {
     const [isLogged, setIsLogged] = useState(false)
     const [user, setUser] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
+    const [alerts, setAlerts] = useState(false); 
 
     useEffect(() => {
         getCurrentUser()
@@ -34,7 +35,9 @@ const GlobalProvider = ({children }) => {
             setIsLogged,
             user,
             setUser,
-            isLoading
+            isLoading,
+            alerts, 
+            setAlerts
                 
         }}
         >
