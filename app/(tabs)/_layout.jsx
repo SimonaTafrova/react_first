@@ -29,30 +29,33 @@ const TabIcon = ({icon, color, name, focused}) => {
 const TabsLayout = () => {
    
    
-        const { alerts, setAlerts } = useGlobalContext(); // Get alerts state and setter from context
-      
-        // Function to check alerts
+        const { alerts, setAlerts } = useGlobalContext();
         const checkAlerts = async () => {
           try {
-            const posts = await getAllAlerts(); // Fetch all alerts
-            const activeAlerts = posts.filter(post => post.isValid === 'true'); // Check for valid alerts
+            const posts = await getAllAlerts();
+            const activeAlerts = posts.filter(post => post.isValid === 'true');
             
             if (activeAlerts.length > 0) {
-              setAlerts(true);   // Set alerts to true if there are active alerts
+              setAlerts(true);   
             } else {
-              setAlerts(false);  // Set alerts to false if there are no active alerts
+              setAlerts(false); 
             }
           } catch (error) {
             console.error('Error checking alerts:', error);
           }
         };
       
-        // useEffect to run on app load
+    
         useEffect(() => {
-            checkAlerts(); // Call checkAlerts on initial app load
+            checkAlerts(); 
         
-            // Set up polling to check alerts periodically (e.g., every 5 minutes)
+           
+            const interval = setInterval(() => {
+              checkAlerts(); 
+            }, 300); 
+        
           
+            return () => clearInterval(interval);
           }, []);
 
 
