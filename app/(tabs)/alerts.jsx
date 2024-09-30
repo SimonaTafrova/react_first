@@ -13,7 +13,7 @@ const Alerts = () => {
   const { data: posts, refetch, error } = useAppwrite(getAllAlerts);
 
   const [refreshing, setRefreshing] = useState(false);
-  const { user, setUser, setAlerts } = useGlobalContext();
+  const { user, setUser } = useGlobalContext();
   
   const toDisplay = [];
 
@@ -25,14 +25,7 @@ const Alerts = () => {
     }
   }
 
-  useEffect(() => {
-    if (toDisplay.length > 0) {
-      setAlerts(true);   // There are active alerts
-    } else {
-      setAlerts(false);  // No active alerts
-    }
-  }, [toDisplay]);  // Run this effect when toDisplay changes
-  
+
 
 
   const countOfSensors = user.sensors;
