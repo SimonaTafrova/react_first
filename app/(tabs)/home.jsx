@@ -1,5 +1,5 @@
 import { FlatList, Image, Text, View, RefreshControl, StyleSheet } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import SearchInput from '../../components/SearchInput';
@@ -7,7 +7,7 @@ import Actions from '../../components/Actions';
 import EmptyState from '../../components/EmptyState';
 import VideoCard from '../../components/VideoCard';
 import useAppwrite from "../../lib/useAppwrite";
-import { getAllPosts , getLastPrescription, createAlert} from "../../lib/appwrite";
+import { getAllPosts , getAllAlerts} from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import CustomButton from '../../components/CustomButton';
 
@@ -18,7 +18,37 @@ const Home = () => {
   const { data: posts, refetch, error } = useAppwrite(getAllPosts);
   
   const [refreshing, setRefreshing] = useState(false);
-  const { user } = useGlobalContext();
+  const { user, setAlerts } = useGlobalContext();
+ 
+  const checkAlerts = async () => {
+    try {
+      const posts = await getAllAlerts();
+      const activeAlerts = posts.filter(post => post.isValid === 'true');
+      
+      if (activeAlerts.length > 0) {
+        setAlerts(true);   
+      } else {
+        setAlerts(false); 
+      }
+    } catch (error) {
+      console.error('Error checking alerts:', error);
+    }
+  };
+
+
+  useEffect(() => {
+      checkAlerts(); 
+  
+     
+      const interval = setInterval(() => {
+        checkAlerts(); 
+      }, 30); 
+  
+    
+      return () => clearInterval(interval);
+    }, []);
+
+
 
 
 
