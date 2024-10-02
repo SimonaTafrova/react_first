@@ -200,7 +200,7 @@ const Actions = ({ posts }) => {
               <Text style={styles.modalText}>Log Prescription</Text>
 
               <SelectList
-                setSelected={(value) => setPrescriptionForm({ ...form, type: value })}
+                setSelected={(value) => setPrescriptionForm({ ...prescriptionForm, type: value })}
                 data={prescriptionType}
                 boxStyles={styles.dropdownBox}
                 inputStyles={styles.dropdownText}

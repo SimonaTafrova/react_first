@@ -31,7 +31,7 @@ const Home = () => {
         setAlerts(false); 
       }
     } catch (error) {
-      console.error('Error checking alerts:', error);
+     
     }
   };
 
