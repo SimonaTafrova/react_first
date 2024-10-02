@@ -5,9 +5,9 @@ const GlobalContext = createContext();
 export const useGlobalContext = () => useContext(GlobalContext);
 
 const GlobalProvider = ({children }) => {
-    const [isLogged, setIsLogged] = useState(false)
-    const [user, setUser] = useState(null)
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLogged, setIsLogged] = useState(false);
+    const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
     const [alerts, setAlerts] = useState(false); 
 
     useEffect(() => {
@@ -26,25 +26,26 @@ const GlobalProvider = ({children }) => {
         })
         .finally(() => {
             setIsLoading(false);
-        })
-    })
+        });
+    }, []); // <-- Add the empty dependency array here
+
+    
+
     return (
         <GlobalContext.Provider
-        value = {{
-            isLogged,
-            setIsLogged,
-            user,
-            setUser,
-            isLoading,
-            alerts, 
-            setAlerts
-                
-        }}
+            value={{
+                isLogged,
+                setIsLogged,
+                user,
+                setUser,
+                isLoading,
+                alerts, 
+                setAlerts
+            }}
         >
             {children}
-           
         </GlobalContext.Provider>
-    )
+    );
 }
 
 export default GlobalProvider;
