@@ -29,6 +29,8 @@ const GlobalProvider = ({children }) => {
         });
     }, []); // <-- Add the empty dependency array here
 
+    
+
     return (
         <GlobalContext.Provider
             value={{
