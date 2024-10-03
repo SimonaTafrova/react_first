@@ -6,15 +6,18 @@ import useAppwrite from "../../lib/useAppwrite";
 import { useState, useEffect } from 'react';
 import React from 'react'
 import { useGlobalContext } from "../../context/GlobalProvider";
-import { getAllAlerts, updateAlert, getCurrentUser } from '../../lib/appwrite';
+import { getAllAlerts, updateAlert, getCurrentUser, getLastPrescription } from '../../lib/appwrite';
 import { images } from '../../constants';
 
 const Alerts = () => {
   const { data: posts, refetch, error } = useAppwrite(getAllAlerts);
-
+ 
   const [refreshing, setRefreshing] = useState(false);
   const { user, setUser } = useGlobalContext();
   
+  
+
+
   const toDisplay = [];
 
   console.log(posts.length)
@@ -29,6 +32,45 @@ const Alerts = () => {
 
 
   const countOfSensors = user.sensors;
+
+ 
+
+  const runPrescriptionAlerts = async () => {
+    
+    try {
+      const prescription = await getLastPrescription();
+      const currentDay = new Date();
+      const lastDate = new Date(prescription[0].time)
+      if(Math.floor((currentDay-lastDate)/(24*3600*1000)) > 7){
+        try {
+      
+          await updateAlert('true','66f3ee8f003c88a7cc7f');
+        
+        } catch (error) {
+          Alert.alert("Error", error.message);
+        } 
+
+      }
+      
+     
+    } catch (error) {
+     
+    }
+
+  }
+
+  useEffect(() => {
+    runPrescriptionAlerts(); 
+
+   
+    const interval = setInterval(() => {
+      runPrescriptionAlerts(); 
+    }, 300000); 
+
+  
+    return () => clearInterval(interval);
+  }, []);
+  
 
 
 
