@@ -52,7 +52,7 @@ const QuickActionButton = ({ onPress, imageSource, label, scale }) => (
 );
 
 const Actions = ({ posts }) => {
-  const { user, setUser } = useGlobalContext();
+  const { user, setUser, setAlerts } = useGlobalContext();
   const [uploading, setUploading] = useState(false);
   const scrollX = useRef(new Animated.Value(0)).current;
   const ITEM_SIZE = screenWidth * 0.6;
@@ -106,6 +106,11 @@ const Actions = ({ posts }) => {
     try{
       await updateSensorsCount();
       const result = await getCurrentUser();
+      if(result.sensors <= 2){
+        setAlerts(true)
+      }else{
+        setAlerts(false)
+      }
       setUser(result);
       Alert.alert("Success", "Sensors started successfully")
     }catch (error) {
