@@ -29,8 +29,36 @@ const TabIcon = ({icon, color, name, focused}) => {
 const TabsLayout = () => {
    
    
-        const { alerts } = useGlobalContext();
+        const { alerts, setAlerts  } = useGlobalContext();
        
+        const checkAlerts = async () => {
+            try {
+              const posts = await getAllAlerts();
+              const activeAlerts = posts.filter(post => post.isValid === 'true');
+              
+              if (activeAlerts.length > 0) {
+                setAlerts(true);   
+              } else {
+                setAlerts(false); 
+              }
+            } catch (error) {
+             
+            }
+          };
+        
+        
+          useEffect(() => {
+              checkAlerts(); 
+          
+             
+              const interval = setInterval(() => {
+                checkAlerts(); 
+              }, 3000); 
+          
+            
+              return () => clearInterval(interval);
+            }, []);
+        
 
 
 

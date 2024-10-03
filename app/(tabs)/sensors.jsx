@@ -15,7 +15,7 @@ import { setSensorsCount, getCurrentUser } from '../../lib/appwrite';
 
 
 const Sensors = () => {
-  const { user, setUser} = useGlobalContext();
+  const { user, setUser, setAlerts} = useGlobalContext();
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [form, setForm] = useState({
     sensors: '',
@@ -31,6 +31,11 @@ const Sensors = () => {
       await setSensorsCount(form);
        const result = await getCurrentUser();
       setUser(result);
+      if(form.sensors <= 2){
+        setAlerts(true)
+      } else {
+        setAlerts(false)
+      }
       Alert.alert("Success", "Sensor count recorded successfully");
     } catch (error) {
       Alert.alert('Error', error.message)
