@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View, Alert } from 'react-native'
 import { React, useState } from 'react'
 
 import { router } from "expo-router";

@@ -42,7 +42,7 @@ const Home = () => {
      
       const interval = setInterval(() => {
         checkAlerts(); 
-      }, 30); 
+      }, 30000); 
   
     
       return () => clearInterval(interval);
