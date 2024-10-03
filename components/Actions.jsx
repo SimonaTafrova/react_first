@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image, Animated, Di
 import { SelectList } from 'react-native-dropdown-select-list';
 import CustomButton from '../components/CustomButton';
 import { useGlobalContext } from '../context/GlobalProvider';
-import { createInsulinInsertion, createPrescriptionLog, updateSensorsCount } from '../lib/appwrite';
+import { createInsulinInsertion, createPrescriptionLog, updateSensorsCount, getCurrentUser } from '../lib/appwrite';
 import { router } from 'expo-router';
 import moment from 'moment';
 

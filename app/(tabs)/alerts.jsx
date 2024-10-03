@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, RefreshControl, FlatList } from 'react-native'
+import { StyleSheet, Text, View, RefreshControl, FlatList, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import EmptyState from '../../components/EmptyState';
 import InfoBox from '../../components/InfoBox';
@@ -37,10 +37,7 @@ const Alerts = () => {
       try {
       
           await updateAlert('true','66f3ee780028d6e85ebe');
-          Alert.alert("Success", "Alert log recorded successfully");
         
-     
-          
         } catch (error) {
           Alert.alert("Error", error.message);
         } 
@@ -49,7 +46,7 @@ const Alerts = () => {
     try {
      
       await updateAlert('false','66f3ee780028d6e85ebe');
-      Alert.alert("Success", "Alert log recorded successfully");
+    
       
     } catch (error) {
       Alert.alert("Error", error.message);
