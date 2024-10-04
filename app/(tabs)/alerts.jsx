@@ -50,6 +50,14 @@ const Alerts = () => {
           Alert.alert("Error", error.message);
         } 
 
+      } else {
+        try {
+      
+          await updateAlert('false','66f3ee8f003c88a7cc7f');
+        
+        } catch (error) {
+          Alert.alert("Error", error.message);
+        } 
       }
       
      
@@ -65,7 +73,7 @@ const Alerts = () => {
    
     const interval = setInterval(() => {
       runPrescriptionAlerts(); 
-    }, 300000); 
+    }, 3000); 
 
   
     return () => clearInterval(interval);

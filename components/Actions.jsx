@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image, Animated, Di
 import { SelectList } from 'react-native-dropdown-select-list';
 import CustomButton from '../components/CustomButton';
 import { useGlobalContext } from '../context/GlobalProvider';
-import { createInsulinInsertion, createPrescriptionLog, updateSensorsCount, getCurrentUser } from '../lib/appwrite';
+import { createInsulinInsertion, createPrescriptionLog, updateSensorsCount, getCurrentUser, updateAlert } from '../lib/appwrite';
 import { router } from 'expo-router';
 import moment from 'moment';
 
@@ -52,7 +52,7 @@ const QuickActionButton = ({ onPress, imageSource, label, scale }) => (
 );
 
 const Actions = ({ posts }) => {
-  const { user, setUser, setAlerts } = useGlobalContext();
+  const { user, setUser, setSensorAlerts, setPrescriptionAlerts } = useGlobalContext();
   const [uploading, setUploading] = useState(false);
   const scrollX = useRef(new Animated.Value(0)).current;
   const ITEM_SIZE = screenWidth * 0.6;
@@ -107,9 +107,9 @@ const Actions = ({ posts }) => {
       await updateSensorsCount();
       const result = await getCurrentUser();
       if(result.sensors <= 2){
-        setAlerts(true)
+        setSensorAlerts(true)
       }else{
-        setAlerts(false)
+        setSensorAlerts(false)
       }
       setUser(result);
       Alert.alert("Success", "Sensors started successfully")
@@ -132,6 +132,8 @@ const Actions = ({ posts }) => {
       });
 
       Alert.alert("Success", "Prescription log recorded successfully");
+      await updateAlert('false','66f3ee8f003c88a7cc7f');
+      setPrescriptionAlerts(false)
       router.push("/home");
     } catch (error) {
       Alert.alert("Error", error.message);

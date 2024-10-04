@@ -29,7 +29,7 @@ const TabIcon = ({icon, color, name, focused}) => {
 const TabsLayout = () => {
    
    
-        const { alerts, setAlerts  } = useGlobalContext();
+        const { sensorAlerts, setSensorAlerts, prescriptionAlerts, setPrescriptionAlerts  } = useGlobalContext();
        
         const checkAlerts = async () => {
             try {
@@ -37,9 +37,9 @@ const TabsLayout = () => {
               const activeAlerts = posts.filter(post => post.isValid === 'true');
               
               if (activeAlerts.length > 0) {
-                setAlerts(true);   
+                setSensorAlerts(true);   
               } else {
-                setAlerts(false); 
+                setSensorAlerts(false); 
               }
             } catch (error) {
              
@@ -132,7 +132,7 @@ const TabsLayout = () => {
             tabBarIcon: ({color, focused}) => (
                 <TabIcon
                 icon={icons.plus}
-                color={alerts ? 'red' : color}
+                color={sensorAlerts ? 'red' : prescriptionAlerts? 'red' : color}
                 name="Alerts"
                 focused={focused}
                 />
