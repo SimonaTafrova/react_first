@@ -41,7 +41,7 @@ const Alerts = () => {
       const prescription = await getLastPrescription();
       const currentDay = new Date();
       const lastDate = new Date(prescription[0].time)
-      if(Math.floor((currentDay-lastDate)/(24*3600*1000)) > 7){
+      if(Math.floor((currentDay-lastDate)/(24*3600*1000)) >= 28){
         try {
       
           await updateAlert('true','66f3ee8f003c88a7cc7f');
@@ -73,7 +73,7 @@ const Alerts = () => {
    
     const interval = setInterval(() => {
       runPrescriptionAlerts(); 
-    }, 3000); 
+    },  300000); 
 
   
     return () => clearInterval(interval);

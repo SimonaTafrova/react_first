@@ -18,36 +18,9 @@ const Home = () => {
   const { data: posts, refetch, error } = useAppwrite(getAllPosts);
   
   const [refreshing, setRefreshing] = useState(false);
-  const { user, setAlerts } = useGlobalContext();
+  const { user} = useGlobalContext();
  
-  const checkAlerts = async () => {
-    try {
-      const posts = await getAllAlerts();
-      const activeAlerts = posts.filter(post => post.isValid === 'true');
-      
-      if (activeAlerts.length > 0) {
-        setAlerts(true);   
-      } else {
-        setAlerts(false); 
-      }
-    } catch (error) {
-     
-    }
-  };
-
-
-  useEffect(() => {
-      checkAlerts(); 
   
-     
-      const interval = setInterval(() => {
-        checkAlerts(); 
-      }, 30000); 
-  
-    
-      return () => clearInterval(interval);
-    }, []);
-
 
 
 
