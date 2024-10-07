@@ -144,7 +144,7 @@ const Alerts = () => {
                   {user?.username}
                 </Text>
                 <Text className="text-2xl font-semibold text-secondary">
-                  Here are your 5 most recent insulin insertions
+                  Here is a list of your active alerts
                 </Text>
               </View>
             </View>
