@@ -21,13 +21,21 @@ const prescriptionType = [
 
 ]
 
-const unitData = [
-  { key: '1', value: 1 },
-  { key: '2', value: 2 },
-  { key: '3', value: 3 },
-  { key: '4', value: 4 },
-  { key: '5', value: 5 },
-];
+
+
+const generateUnits = () =>{
+  const unitlist = [];
+  let currentAmount = 0;
+  for(let i=0; i<=40; i++){
+    currentAmount = currentAmount + 0.5;
+    unitlist.push({key: i.toString(), value: currentAmount})
+    
+  }
+  return unitlist;
+}
+
+const unitData = generateUnits();
+
 
 // Generate the last 30 days for the dropdown
 const generatePastDates = (numDays) => {
@@ -170,7 +178,13 @@ const Actions = ({ posts }) => {
               />
 
               <SelectList
-                setSelected={(value) => setForm({ ...form, units: parseInt(value) })}
+                 setSelected={(value) => {
+                 
+
+                  let units = unitData.at(value).value
+                
+                  setForm({ ...form, units: units });
+                }}
                 data={unitData}
                 boxStyles={[styles.dropdownBox, { marginTop: 20 }]}
                 inputStyles={styles.dropdownText}
