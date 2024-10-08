@@ -6,7 +6,7 @@ import useAppwrite from "../../lib/useAppwrite";
 import { useState, useEffect } from 'react';
 import React from 'react'
 import { useGlobalContext } from "../../context/GlobalProvider";
-import { getAllAlerts, updateAlert, getCurrentUser, getLastPrescription } from '../../lib/appwrite';
+import { getAllAlerts, updateAlert, getCurrentUser, getLastPrescription, getTypeOfPrescription } from '../../lib/appwrite';
 import { images } from '../../constants';
 
 const Alerts = () => {
@@ -20,7 +20,7 @@ const Alerts = () => {
 
   const toDisplay = [];
 
-  console.log(posts.length)
+
 
   for(let i=0; i < posts.length; i++){
     if(posts[i].isValid == 'true'){
@@ -67,6 +67,26 @@ const Alerts = () => {
 
   }
 
+  const runQuarterlyPrescriptionAlert = async () => {
+    
+    try {
+      const quarterlyPrescription = await getTypeOfPrescription('1');
+      const protocolPrescription = await getTypeOfPrescription('2');
+      console.log(quarterlyPrescription.length);
+      console.log(protocolPrescription.length)
+      
+        
+        } catch (error) {
+          Alert.alert("Error", error.message);
+        } 
+      }
+      
+
+      useEffect(() => {
+        runQuarterlyPrescriptionAlert();
+      })
+     
+   
   useEffect(() => {
     runPrescriptionAlerts(); 
 
