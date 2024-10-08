@@ -68,7 +68,7 @@ const Insulin = () => {
                   {user?.username}
                 </Text>
                 <Text className="text-2xl font-semibold text-secondary">
-                  Here are your 5 most recent insulin insertions
+                  Here are your 10 most recent insulin insertions
                 </Text>
               </View>
             </View>
@@ -76,7 +76,7 @@ const Insulin = () => {
           </View>
         )}
         ListEmptyComponent={() => (
-          <EmptyState title="No insertions created yet" />
+          <EmptyState title="No insertions logged yet" />
         )}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
