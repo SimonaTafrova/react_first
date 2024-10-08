@@ -70,10 +70,13 @@ const Alerts = () => {
   const runQuarterlyPrescriptionAlert = async () => {
     
     try {
-      const quarterlyPrescription = await getTypeOfPrescription('1');
-      const protocolPrescription = await getTypeOfPrescription('2');
+      const quarterlyPrescription = await getTypeOfPrescription('2');
+      const protocolPrescription = await getTypeOfPrescription('3');
       console.log(quarterlyPrescription.length);
-      console.log(protocolPrescription.length)
+      console.log(quarterlyPrescription[0].time)
+      console.log(protocolPrescription)
+      console.log(protocolPrescription.length);
+
       
         
         } catch (error) {
