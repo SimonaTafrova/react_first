@@ -6,13 +6,13 @@ import useAppwrite from "../../lib/useAppwrite";
 import { useState, useEffect } from 'react';
 import React from 'react';
 import { useGlobalContext } from "../../context/GlobalProvider";
-import { getAllAlerts, getLastPrescription, getTypeOfPrescription, createAlert } from '../../lib/appwrite';
+import { getAllAlerts, createAlert, searchAlerts, getTypeOfPrescription } from '../../lib/appwrite';
 import { images } from '../../constants';
 
 const Alerts = () => {
   const { data: posts, refetch, error } = useAppwrite(getAllAlerts);
   const [refreshing, setRefreshing] = useState(false);
-  const { user, setUser } = useGlobalContext();
+  const { user } = useGlobalContext();
 
   const alertTemplate = {
     sensorAlert: { id: '1', type: 'sensorAlert', message: 'You need to order CGM sensors!' },
@@ -22,54 +22,70 @@ const Alerts = () => {
   };
 
   const countOfSensors = user.sensors;
+  const [isCreatingAlert, setIsCreatingAlert] = useState(false); // Track alert creation status
 
-  // Function for handling sensor alert
-  const runSensorAlert = async () => {
-    if (countOfSensors <= 2) {
-      try {
-        console.log(posts)
-        const existingAlert = posts.find(post => post.type === alertTemplate.sensorAlert.type);
-        if (!existingAlert) {
-          await createAlert(alertTemplate.sensorAlert.type, alertTemplate.sensorAlert.message);
-        }
-      } catch (error) {
-        Alert.alert('Error', error.message);
+  // Helper function to check if an alert already exists in the database
+  const doesAlertExist = async (alertType) => {
+    const existingAlert = await searchAlerts(alertType);
+    return existingAlert.length > 0;
+  };
+
+  // Debounced function to create an alert
+  const createAlertDebounced = async (type, message) => {
+    if (isCreatingAlert) return; // Prevent concurrent alert creations
+
+    setIsCreatingAlert(true);
+    try {
+      const exists = await doesAlertExist(type);
+      if (!exists) {
+        await createAlert(type, message);
+        setIsCreatingAlert(false);
       }
+    } catch (error) {
+      Alert.alert('Error', error.message);
+      setIsCreatingAlert(false);
     }
   };
 
-  // Combined function for handling monthly, quarterly, and protocol alerts
+  // Function to handle sensor alerts
+  const runSensorAlert = async () => {
+    if (countOfSensors <= 2) {
+      await createAlertDebounced(alertTemplate.sensorAlert.type, alertTemplate.sensorAlert.message);
+    }
+  };
+
+  // Function to handle prescription alerts
   const runPrescriptionAlerts = async () => {
     try {
-      const prescription = await getTypeOfPrescription('1');
-      const quarterlyPrescription = await getTypeOfPrescription('2');
-      const protocolPrescription = await getTypeOfPrescription('3');
+      const [monthlyPrescription, quarterlyPrescription, protocolPrescription] = await Promise.all([
+        getTypeOfPrescription('1'),
+        getTypeOfPrescription('2'),
+        getTypeOfPrescription('3')
+      ]);
+
       const currentDay = new Date();
-      const lastDate = new Date(prescription[0].time);
-      const quarterlyDate = new Date(quarterlyPrescription[0].time);
-      const protocolDate = new Date(protocolPrescription[0].time);
 
-      // Check for monthly prescription alert
-      if (Math.floor((currentDay - lastDate) / (24 * 3600 * 1000)) >= 28) {
-        const existingMonthlyAlert = posts.find(post => post.type === alertTemplate.monthlyPrescriptionAlert.type);
-        if (!existingMonthlyAlert) {
-          await createAlert(alertTemplate.monthlyPrescriptionAlert.type, alertTemplate.monthlyPrescriptionAlert.message);
+      // Monthly prescription check
+      if (monthlyPrescription[0]) {
+        const lastDate = new Date(monthlyPrescription[0].time);
+        if (Math.floor((currentDay - lastDate) / (24 * 3600 * 1000)) >= 1) {
+          await createAlertDebounced(alertTemplate.monthlyPrescriptionAlert.type, alertTemplate.monthlyPrescriptionAlert.message);
         }
       }
 
-      // Check for quarterly prescription alert
-      if (Math.floor((currentDay - quarterlyDate) / (24 * 3600 * 1000)) >= 85) {
-        const existingQuarterlyAlert = posts.find(post => post.type === alertTemplate.quarterlyPrescriptionAlert.type);
-        if (!existingQuarterlyAlert) {
-          await createAlert(alertTemplate.quarterlyPrescriptionAlert.type, alertTemplate.quarterlyPrescriptionAlert.message);
+      // Quarterly prescription check
+      if (quarterlyPrescription[0]) {
+        const quarterlyDate = new Date(quarterlyPrescription[0].time);
+        if (Math.floor((currentDay - quarterlyDate) / (24 * 3600 * 1000)) >= 1) {
+          await createAlertDebounced(alertTemplate.quarterlyPrescriptionAlert.type, alertTemplate.quarterlyPrescriptionAlert.message);
         }
       }
 
-      // Check for protocol alert (6 months = ~182 days)
-      if (Math.floor((currentDay - protocolDate) / (24 * 3600 * 1000)) >= 182) {
-        const existingProtocolAlert = posts.find(post => post.type === alertTemplate.protocolAlert.type);
-        if (!existingProtocolAlert) {
-          await createAlert(alertTemplate.protocolAlert.type, alertTemplate.protocolAlert.message);
+      // Protocol prescription check
+      if (protocolPrescription[0]) {
+        const protocolDate = new Date(protocolPrescription[0].time);
+        if (Math.floor((currentDay - protocolDate) / (24 * 3600 * 1000)) >= 1) {
+          await createAlertDebounced(alertTemplate.protocolAlert.type, alertTemplate.protocolAlert.message);
         }
       }
     } catch (error) {
@@ -81,6 +97,7 @@ const Alerts = () => {
     const runAllAlerts = async () => {
       await runSensorAlert();
       await runPrescriptionAlerts();
+    
     };
 
     runAllAlerts();
@@ -113,7 +130,7 @@ const Alerts = () => {
         data={posts} // Display all alerts directly without filtering
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => (
-          <View className="bg-secondary-200 mt-2 mb-2 rounded-xl min-h-[62px] p-3 flex-row justify-between items-center">
+          <View className="bg-secondary-200 mt-2 mb-2 rounded-xl min-h-[62px] p-4 flex-row justify-between items-center">
             <InfoBox
               textcontent={item.message}
               imagesource={images.insulin}
@@ -121,7 +138,7 @@ const Alerts = () => {
               titleStyles="text-lg"
             />
             <TouchableOpacity onPress={() => handleDeleteAlert(item.$id)}>
-              <Text style={{ color: 'red', fontSize: 20 }}>X</Text>
+              <Text style={{ color: 'black', fontSize: 20 }}>X</Text>
             </TouchableOpacity>
           </View>
         )}
