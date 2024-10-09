@@ -6,7 +6,7 @@ import useAppwrite from "../../lib/useAppwrite";
 import { useState, useEffect } from 'react';
 import React from 'react';
 import { useGlobalContext } from "../../context/GlobalProvider";
-import { getAllAlerts, createAlert, searchAlerts, getTypeOfPrescription } from '../../lib/appwrite';
+import { getAllAlerts, createAlert, searchAlerts, getTypeOfPrescription, deleteAlert } from '../../lib/appwrite';
 import { images } from '../../constants';
 
 const Alerts = () => {
@@ -118,6 +118,7 @@ const Alerts = () => {
 
   const handleDeleteAlert = async (alertId) => {
     try {
+      await deleteAlert(alertId);
       await refetch(); // Refresh the list after deletion
     } catch (error) {
       Alert.alert('Error', error.message);
@@ -137,9 +138,7 @@ const Alerts = () => {
               containerStyles="mt-0"
               titleStyles="text-lg"
             />
-            <TouchableOpacity onPress={() => handleDeleteAlert(item.$id)}>
-              <Text style={{ color: 'black', fontSize: 20 }}>X</Text>
-            </TouchableOpacity>
+          
           </View>
         )}
         ListHeaderComponent={() => (
