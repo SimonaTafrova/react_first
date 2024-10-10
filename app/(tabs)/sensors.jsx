@@ -7,15 +7,21 @@ import { Image, TouchableOpacity } from "react-native";
 
 import { images } from "../../constants";
 import useAppwrite from "../../lib/useAppwrite";
-import { getUserPosts, signOut, getAllPrescriptions } from "../../lib/appwrite";
+
 import { useGlobalContext } from "../../context/GlobalProvider";
 import FormField from '../../components/FormField';
 import CustomButton from '../../components/CustomButton';
-import { setSensorsCount, getCurrentUser } from '../../lib/appwrite';
+import { setSensorsCount, getCurrentUser, deleteAlert, getAllAlerts, searchAlerts, createAlert } from '../../lib/appwrite';
+import { alertTemplates } from '../../lib/tools';
+
+
 
 
 const Sensors = () => {
   const { user, setUser, setSensorAlerts} = useGlobalContext();
+
+
+ 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [form, setForm] = useState({
     sensors: '',
@@ -30,11 +36,19 @@ const Sensors = () => {
     try {
       await setSensorsCount(form);
        const result = await getCurrentUser();
+       const existing = await searchAlerts(alertTemplates.sensorAlert.type)
       setUser(result);
       if(form.sensors <= 2){
         setSensorAlerts(true)
+        if(existing.length === 0){
+          await createAlert(alertTemplates.sensorAlert.type,alertTemplates.sensorAlert.message)
+        }
       } else {
         setSensorAlerts(false)
+        
+        if(existing.length > 0){
+          await deleteAlert(existing[0].$id);
+        }
       }
       Alert.alert("Success", "Sensor count recorded successfully");
     } catch (error) {
