@@ -8,18 +8,15 @@ import React from 'react';
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { getAllAlerts, createAlert, searchAlerts, getTypeOfPrescription, deleteAlert } from '../../lib/appwrite';
 import { images } from '../../constants';
+import { alertTemplates } from '../../lib/tools'
 
 const Alerts = () => {
   const { data: posts, refetch, error } = useAppwrite(getAllAlerts);
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useGlobalContext();
 
-  const alertTemplate = {
-    sensorAlert: { id: '1', type: 'sensorAlert', message: 'You need to order CGM sensors!' },
-    monthlyPrescriptionAlert: { id: '2', type: 'monthlyPrescriptionAlert', message: 'It is time to collect your new monthly prescription!' },
-    quarterlyPrescriptionAlert: { id: '3', type: 'quarterlyPrescriptionAlert', message: 'You need to call your GP for a new 3-month prescription!' },
-    protocolAlert: { id: '4', type: 'protocolAlert', message: 'It is time to call your endocrinologist regarding a new 6-month protocol!' }
-  };
+  const alertTemplate = alertTemplates;
+
 
   const countOfSensors = user.sensors;
   const [isCreatingAlert, setIsCreatingAlert] = useState(false); // Track alert creation status
@@ -76,7 +73,7 @@ const Alerts = () => {
       // Quarterly prescription check
       if (quarterlyPrescription[0]) {
         const quarterlyDate = new Date(quarterlyPrescription[0].time);
-        if (Math.floor((currentDay - quarterlyDate) / (24 * 3600 * 1000)) >= 1) {
+        if (Math.floor((currentDay - quarterlyDate) / (24 * 3600 * 1000)) >=2) {
           await createAlertDebounced(alertTemplate.quarterlyPrescriptionAlert.type, alertTemplate.quarterlyPrescriptionAlert.message);
         }
       }
@@ -84,7 +81,7 @@ const Alerts = () => {
       // Protocol prescription check
       if (protocolPrescription[0]) {
         const protocolDate = new Date(protocolPrescription[0].time);
-        if (Math.floor((currentDay - protocolDate) / (24 * 3600 * 1000)) >= 1) {
+        if (Math.floor((currentDay - protocolDate) / (24 * 3600 * 1000)) >= 2) {
           await createAlertDebounced(alertTemplate.protocolAlert.type, alertTemplate.protocolAlert.message);
         }
       }

@@ -3,9 +3,10 @@ import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image, Animated, Di
 import { SelectList } from 'react-native-dropdown-select-list';
 import CustomButton from '../components/CustomButton';
 import { useGlobalContext } from '../context/GlobalProvider';
-import { createInsulinInsertion, createPrescriptionLog, updateSensorsCount, getCurrentUser, updateAlert } from '../lib/appwrite';
+import { createInsulinInsertion, createPrescriptionLog, updateSensorsCount, getCurrentUser,createAlert, searchAlerts, getTypeOfPrescription, deleteAlert } from '../lib/appwrite';
 import { router } from 'expo-router';
 import moment from 'moment';
+import { alertTemplates } from '../lib/tools';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -115,6 +116,7 @@ const Actions = ({ posts }) => {
       await updateSensorsCount();
       const result = await getCurrentUser();
       if(result.sensors <= 2){
+        await createAlert(alertTemplates.sensorAlert.type,alertTemplates.sensorAlert.message)
         setSensorAlerts(true)
       }else{
         setSensorAlerts(false)
@@ -133,14 +135,14 @@ const Actions = ({ posts }) => {
 
     setUploading(true);
     try {
-      console.log("Submitting prescription:", prescriptionForm);
+      console.log("Submitting prescription:", prescriptionForm.type);
       await createPrescriptionLog({
         ...prescriptionForm,
         userId: user.$id,
       });
 
       Alert.alert("Success", "Prescription log recorded successfully");
-      await updateAlert('false','66f3ee8f003c88a7cc7f');
+      handleAlert(prescriptionForm.type);
       setPrescriptionAlerts(false)
       router.push("/home");
     } catch (error) {
@@ -151,6 +153,25 @@ const Actions = ({ posts }) => {
       setPrescriptionModalVisible(false);
     }
   };
+
+  const handleAlert = async(typeOfPrescription) => {
+    let existing;
+    if(typeOfPrescription === '1'){
+      existing = await searchAlerts(alertTemplates.monthlyPrescriptionAlert.type);
+    } else if(typeOfPrescription === '2'){
+      existing = await searchAlerts(alertTemplates.quarterlyPrescriptionAlert.type);
+    } else {
+      existing = await searchAlerts(alertTemplates.protocolAlert.type);
+    }
+
+    console.log(existing);
+    console.log(typeOfPrescription);
+    console.log(typeOfPrescription === 'Monthly')
+
+    if(existing.length > 0){
+      await deleteAlert(existing[0].$id);
+    }
+  }
 
   const insulinModal = () => (
     <Modal

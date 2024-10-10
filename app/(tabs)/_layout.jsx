@@ -34,9 +34,9 @@ const TabsLayout = () => {
         const checkAlerts = async () => {
             try {
               const posts = await getAllAlerts();
-              const activeAlerts = posts.filter(post => post.isValid === 'true');
+             
               
-              if (activeAlerts.length > 0) {
+              if (posts.length > 0) {
                 setSensorAlerts(true);   
               } else {
                 setSensorAlerts(false); 
