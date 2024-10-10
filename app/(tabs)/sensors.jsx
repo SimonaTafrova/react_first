@@ -41,7 +41,7 @@ const Sensors = () => {
       if(form.sensors <= 2){
         setSensorAlerts(true)
         if(existing.length === 0){
-          await createAlert(alertTemplates.sensorAlert.type,alertTemplates.sensorAlert.message)
+          await createAlert(alertTemplates.sensorAlert.type,alertTemplates.sensorAlert.messag, user.$id, new Date())
         }
       } else {
         setSensorAlerts(false)

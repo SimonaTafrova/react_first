@@ -21,6 +21,16 @@ const Alerts = () => {
   const countOfSensors = user.sensors;
   const [isCreatingAlert, setIsCreatingAlert] = useState(false); // Track alert creation status
 
+  const formatTime = (time) => {
+    let date = new Date(time);
+
+    let dateToReturn = `${date.getDate()} / ${date.getMonth() + 1} / ${date.getFullYear()}`
+
+    return dateToReturn;
+
+  }
+
+
   // Helper function to check if an alert already exists in the database
   const doesAlertExist = async (alertType) => {
     const existingAlert = await searchAlerts(alertType);
@@ -35,7 +45,7 @@ const Alerts = () => {
     try {
       const exists = await doesAlertExist(type);
       if (!exists) {
-        await createAlert(type, message);
+        await createAlert(type, message, user.$id, new Date());
         setIsCreatingAlert(false);
       }
     } catch (error) {
@@ -132,6 +142,7 @@ const Alerts = () => {
             <InfoBox
               textcontent={item.message}
               imagesource={images.insulin}
+              date={formatTime(item.time)}
               containerStyles="mt-0"
               titleStyles="text-lg"
             />

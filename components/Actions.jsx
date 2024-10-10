@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image, Animated, Di
 import { SelectList } from 'react-native-dropdown-select-list';
 import CustomButton from '../components/CustomButton';
 import { useGlobalContext } from '../context/GlobalProvider';
-import { createInsulinInsertion, createPrescriptionLog, updateSensorsCount, getCurrentUser,createAlert, searchAlerts, getTypeOfPrescription, deleteAlert } from '../lib/appwrite';
+import { createInsulinInsertion, createPrescriptionLog, updateSensorsCount, getCurrentUser,createAlert, searchAlerts, deleteAlert } from '../lib/appwrite';
 import { router } from 'expo-router';
 import moment from 'moment';
 import { alertTemplates } from '../lib/tools';
@@ -80,7 +80,7 @@ const Actions = ({ posts }) => {
     { id: 'action1', label: 'Log Insulin', imageSource: require('../assets/images/insulin.png'), onPress: () => setInsulinModalVisible(true) },
     { id: 'action2', label: 'Start Sensor', imageSource: require('../assets/images/sensor.png'), onPress: () => {submitStartedSensor()} },
     { id: 'action3', label: 'Log Prescription', imageSource: require('../assets/images/prescription.png'), onPress: () => setPrescriptionModalVisible(true) },
-    { id: 'action4', label: 'Insulin Insertions', imageSource: require('../assets/images/insulin.png'), onPress: () => console.log('Insulin Insertions') },
+   
   ];
 
   const data = [...quickActions, ...posts];
