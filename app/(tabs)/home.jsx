@@ -1,4 +1,4 @@
-import { FlatList, Image, Text, View, RefreshControl, StyleSheet } from 'react-native';
+import { FlatList, Image, Text, View, RefreshControl, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
@@ -7,9 +7,11 @@ import Actions from '../../components/Actions';
 import EmptyState from '../../components/EmptyState';
 import VideoCard from '../../components/VideoCard';
 import useAppwrite from "../../lib/useAppwrite";
-import { getAllPosts , getAllAlerts} from "../../lib/appwrite";
+import { getAllPosts , getAllAlerts, signOut} from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import CustomButton from '../../components/CustomButton';
+import { icons } from "../../constants";
+import { router } from "expo-router";
 
 
 
@@ -18,10 +20,16 @@ const Home = () => {
   const { data: posts, refetch, error } = useAppwrite(getAllPosts);
   
   const [refreshing, setRefreshing] = useState(false);
-  const { user} = useGlobalContext();
+  const { user, setUser, setIsLogged} = useGlobalContext();
  
   
+  const logout = async () => {
+    await signOut();
+    setUser(null);
+    setIsLogged(false);
 
+    router.replace("/sign-in");
+  };
 
 
 
@@ -55,6 +63,7 @@ const Home = () => {
         )}
         ListHeaderComponent={() => (
           <View className="flex my-6 px-4 space-y-6">
+          
             <View className="flex justify-between items-start flex-row mb-6">
               <View>
                 <Text className="font-pmedium text-sm text-gray-100">
@@ -66,11 +75,16 @@ const Home = () => {
               </View>
 
               <View className="mt-1.5">
-                <Image
-                  source={images.logoSmall}
-                  className="w-9 h-10 rounded-md border-2 border-secondary"
-                  resizeMode="contain"
-                />
+              <TouchableOpacity
+              onPress= {logout}
+              className="flex w-full items-end mb-10"
+            >
+              <Image
+                source={icons.logout}
+                resizeMode="contain"
+                className="w-6 h-6"
+              />
+            </TouchableOpacity>
               </View>
             </View>
             <SearchInput />
