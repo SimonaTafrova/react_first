@@ -76,6 +76,11 @@ const Actions = ({ posts }) => {
     type: '',
   });
 
+  const typeData = [
+    { key: '1', value: user.rapidInsulin },
+    { key: '2', value: user.slowInsulin },
+  ];
+
   const quickActions = [
     { id: 'action1', label: 'Log Insulin', imageSource: require('../assets/images/insulin.png'), onPress: () => setInsulinModalVisible(true) },
     { id: 'action2', label: 'Start Sensor', imageSource: require('../assets/images/sensor.png'), onPress: () => {submitStartedSensor()} },

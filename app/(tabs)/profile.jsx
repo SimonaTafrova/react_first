@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import CustomButton from '../../components/CustomButton'; // Assuming you have a CustomButton component
+import { setInsulinTypes, getCurrentUser } from '../../lib/appwrite';
 
-// Reusable quick action button component without animation
 const StaticQuickActionButton = ({ onPress, imageSource, label }) => (
   <View className="w-[48%] mb-5">
     <TouchableOpacity className="bg-[#FF8E01] justify-center items-center rounded-lg py-5" onPress={onPress}>
@@ -15,19 +15,21 @@ const StaticQuickActionButton = ({ onPress, imageSource, label }) => (
 );
 
 const Profile = () => {
-  const { user } = useGlobalContext();
+  const { user, setUser } = useGlobalContext();
   const [modals, setModals] = useState({
     insulinModal: false,
     emailModal: false,
     passwordModal: false,
     usernameModal: false,
   });
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
-    insulinType: '',
-    units: '',
+    rapidInsulin: '',
+    slowInsulin: '',
     email: '',
     password: '',
     confirmPassword: '',
+    currentPassword: '', // Add this field for verification
     username: '',
   });
 
@@ -46,10 +48,17 @@ const Profile = () => {
   };
 
   const handleSubmit = (type) => {
+    // Add password verification for sensitive changes
+    if (!formData.currentPassword && type != 'insulin') {
+      Alert.alert('Error', 'Please enter your current password to verify.');
+      return;
+    }
+
     // Handle submit logic for each modal
     switch (type) {
       case 'insulin':
-        Alert.alert('Success', `Insulin Type: ${formData.insulinType}, Units: ${formData.units}`);
+        Alert.alert('Success', `Insulin Type: ${formData.rapidInsulin}, Units: ${formData.slowInsulin}`);
+        submitInsulinTypes(formData.rapidInsulin, formData.slowInsulin)
         break;
       case 'email':
         Alert.alert('Success', `Email Changed to: ${formData.email}`);
@@ -69,6 +78,24 @@ const Profile = () => {
     }
     toggleModal(type + 'Modal');
   };
+
+  const submitInsulinTypes = async(rapid, slow) => {
+    setIsSubmitting(true);
+
+    try {
+      await setInsulinTypes(rapid, slow);
+       const result = await getCurrentUser();
+       setUser(result);
+     
+    } catch (error) {
+      Alert.alert('Error', error.message)
+      
+    } finally {
+      setFormData({ rapidInsulin : '' }, {slowInsulin : ''});
+      setIsSubmitting(false);
+    }
+
+  }
 
   const quickActions = [
     { id: 'action1', label: 'Set Insulin Types', imageSource: require('../../assets/images/insulin.png'), modal: 'insulinModal' },
@@ -113,17 +140,19 @@ const Profile = () => {
               <TouchableWithoutFeedback>
                 <View className="bg-primary p-6 rounded-lg w-[90%] border-4 border-secondary-200">
                   <Text className="text-lg font-bold mb-4 text-center text-secondary-200">Set Insulin Types</Text>
-                  <Text className="text-md mb-4 text-left text-white">Rapid Insulin</Text>
                   <TextInput
                     className="border bg-primary border-secondary-200 rounded p-3 mb-3 text-white"
-                    value={formData.insulinType}
-                    onChangeText={(text) => handleInputChange('insulinType', text)}
+                    placeholder="Rapid Insulin"
+                    placeholderTextColor="#FFFFFF" 
+                    value={formData.rapidInsulin}
+                    onChangeText={(text) => handleInputChange('rapidInsulin', text)}
                   />
-                   <Text className="text-md mb-4 text-left text-white">Rapid Insulin</Text>
                   <TextInput
-                   className="border border-gray-300 rounded p-3 mb-3"
-                    value={formData.units}
-                    onChangeText={(text) => handleInputChange('units', text)}
+                    className="border bg-primary border-secondary-200 rounded p-3 mb-3 text-white"
+                    placeholder="Slow-acting Insulin"
+                    placeholderTextColor="#FFFFFF" 
+                    value={formData.slowInsulin}
+                    onChangeText={(text) => handleInputChange('slowInsulin', text)}
                   />
                   <CustomButton title="Submit" handlePress={() => handleSubmit('insulin')} />
                 </View>
@@ -142,14 +171,22 @@ const Profile = () => {
           <TouchableWithoutFeedback onPress={() => toggleModal('emailModal')}>
             <View className="flex-1 justify-center items-center bg-black bg-opacity-60">
               <TouchableWithoutFeedback>
-              <View className="bg-primary p-6 rounded-lg w-[90%] border-4 border-secondary-200">
-                  <Text className="text-lg font-bold mb-4 text-center text-secondary-200">Change e-mail</Text>
-                  <Text className="text-md mb-4 text-left text-white">Please enter your new e-mail</Text>
+                <View className="bg-primary p-6 rounded-lg w-[90%] border-4 border-secondary-200">
+                  <Text className="text-lg font-bold mb-4 text-center text-secondary-200">Change Email</Text>
                   <TextInput
                     className="border bg-primary border-secondary-200 rounded p-3 mb-3 text-white"
-              
+                    placeholder="New Email"
+                    placeholderTextColor="#FFFFFF" 
                     value={formData.email}
                     onChangeText={(text) => handleInputChange('email', text)}
+                  />
+                  <TextInput
+                    className="border bg-primary border-secondary-200 rounded p-3 mb-3 text-white"
+                    placeholder="Current Password"
+                    placeholderTextColor="#FFFFFF" 
+                    secureTextEntry={true}
+                    value={formData.currentPassword}
+                    onChangeText={(text) => handleInputChange('currentPassword', text)}
                   />
                   <CustomButton title="Submit" handlePress={() => handleSubmit('email')} />
                 </View>
@@ -168,21 +205,31 @@ const Profile = () => {
           <TouchableWithoutFeedback onPress={() => toggleModal('passwordModal')}>
             <View className="flex-1 justify-center items-center bg-black bg-opacity-60">
               <TouchableWithoutFeedback>
-                <View className="bg-white p-6 rounded-lg w-[90%]">
-                  <Text className="text-lg font-bold mb-4 text-center">Change Password</Text>
+                <View className="bg-primary p-6 rounded-lg w-[90%] border-4 border-secondary-200">
+                  <Text className="text-lg font-bold mb-4 text-center text-secondary-200">Change Password</Text>
                   <TextInput
+                    className="border bg-primary border-secondary-200 rounded p-3 mb-3 text-white"
                     placeholder="New Password"
-                    className="border border-gray-300 rounded p-3 mb-3"
-                    value={formData.password}
+                    placeholderTextColor="#FFFFFF" 
                     secureTextEntry={true}
+                    value={formData.password}
                     onChangeText={(text) => handleInputChange('password', text)}
                   />
                   <TextInput
-                    placeholder="Confirm Password"
-                    className="border border-gray-300 rounded p-3 mb-3"
-                    value={formData.confirmPassword}
+                    className="border bg-primary border-secondary-200 rounded p-3 mb-3 text-white"
+                    placeholder="Confirm New Password"
+                    placeholderTextColor="#FFFFFF" 
                     secureTextEntry={true}
+                    value={formData.confirmPassword}
                     onChangeText={(text) => handleInputChange('confirmPassword', text)}
+                  />
+                  <TextInput
+                    className="border bg-primary border-secondary-200 rounded p-3 mb-3 text-white"
+                    placeholder="Current Password"
+                    placeholderTextColor="#FFFFFF" 
+                    secureTextEntry={true}
+                    value={formData.currentPassword}
+                    onChangeText={(text) => handleInputChange('currentPassword', text)}
                   />
                   <CustomButton title="Submit" handlePress={() => handleSubmit('password')} />
                 </View>
@@ -192,33 +239,43 @@ const Profile = () => {
         </Modal>
 
         {/* Username Modal */}
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={modals.usernameModal}
-          onRequestClose={() => toggleModal('usernameModal')}
-        >
-          <TouchableWithoutFeedback onPress={() => toggleModal('usernameModal')}>
-            <View className="flex-1 justify-center items-center bg-black bg-opacity-60">
-              <TouchableWithoutFeedback>
-                <View className="bg-white p-6 rounded-lg w-[90%]">
-                  <Text className="text-lg font-bold mb-4 text-center">Change Username</Text>
-                  <TextInput
-                    placeholder="New Username"
-                    className="border border-gray-300 rounded p-3 mb-3"
-                    value={formData.username}
-                    onChangeText={(text) => handleInputChange('username', text)}
-                  />
-                  <CustomButton title="Submit" handlePress={() => handleSubmit('username')} />
-                </View>
-              </TouchableWithoutFeedback>
-            </View>
-          </TouchableWithoutFeedback>
-        </Modal>
+{/* Username Modal */}
+<Modal
+  animationType="fade"
+  transparent={true}
+  visible={modals.usernameModal}
+  onRequestClose={() => toggleModal('usernameModal')}
+>
+  <TouchableWithoutFeedback onPress={() => toggleModal('usernameModal')}>
+    {/* Wrap everything inside a single parent View */}
+    <View className="flex-1 justify-center items-center bg-black bg-opacity-60">
+      <TouchableWithoutFeedback>
+        <View className="bg-primary p-6 rounded-lg w-[90%] border-4 border-secondary-200">
+          <Text className="text-lg font-bold mb-4 text-center text-secondary-200">Change Username</Text>
+          <TextInput
+            className="border bg-primary border-secondary-200 rounded p-3 mb-3 text-white"
+            placeholder="New Username"
+            placeholderTextColor="#FFFFFF" 
+            value={formData.username}
+            onChangeText={(text) => handleInputChange('username', text)}
+          />
+          <TextInput
+            className="border bg-primary border-secondary-200 rounded p-3 mb-3 text-white"
+            placeholder="Current Password"
+            placeholderTextColor="#FFFFFF" 
+            secureTextEntry={true}
+            value={formData.currentPassword}
+            onChangeText={(text) => handleInputChange('currentPassword', text)}
+          />
+          <CustomButton title="Submit" handlePress={() => handleSubmit('username')} />
+        </View>
+      </TouchableWithoutFeedback>
+    </View>
+  </TouchableWithoutFeedback>
+</Modal>
 
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
-
+                </ScrollView>
+                </SafeAreaView>
+  )
+}
 export default Profile;
