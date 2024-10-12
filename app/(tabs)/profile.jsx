@@ -103,6 +103,21 @@ const Profile = () => {
 
   }
 
+  const submitPasswordUpdate = async(newPassword, oldPassword) => {
+    try {
+      await updatePassword(newPassword,oldPassword);
+       const result = await getCurrentUser();
+       setUser(result);
+     
+    } catch (error) {
+      Alert.alert('Error', error.message)
+      
+    } finally {
+      setFormData({ password : '' }, {currentPassword : ''}, {confirmPassword : ''});
+      setIsSubmitting(false);
+    }
+  }
+
  
 
 
