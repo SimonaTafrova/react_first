@@ -75,7 +75,7 @@ const Alerts = () => {
       // Monthly prescription check
       if (monthlyPrescription[0]) {
         const lastDate = new Date(monthlyPrescription[0].time);
-        if (Math.floor((currentDay - lastDate) / (24 * 3600 * 1000)) >= 1) {
+        if (Math.floor((currentDay - lastDate) / (24 * 3600 * 1000)) >= 28) {
           await createAlertDebounced(alertTemplate.monthlyPrescriptionAlert.type, alertTemplate.monthlyPrescriptionAlert.message);
         }
       }
@@ -83,7 +83,7 @@ const Alerts = () => {
       // Quarterly prescription check
       if (quarterlyPrescription[0]) {
         const quarterlyDate = new Date(quarterlyPrescription[0].time);
-        if (Math.floor((currentDay - quarterlyDate) / (24 * 3600 * 1000)) >=2) {
+        if (Math.floor((currentDay - quarterlyDate) / (24 * 3600 * 1000)) >=85) {
           await createAlertDebounced(alertTemplate.quarterlyPrescriptionAlert.type, alertTemplate.quarterlyPrescriptionAlert.message);
         }
       }
@@ -91,7 +91,7 @@ const Alerts = () => {
       // Protocol prescription check
       if (protocolPrescription[0]) {
         const protocolDate = new Date(protocolPrescription[0].time);
-        if (Math.floor((currentDay - protocolDate) / (24 * 3600 * 1000)) >= 2) {
+        if (Math.floor((currentDay - protocolDate) / (24 * 3600 * 1000)) >= 182) {
           await createAlertDebounced(alertTemplate.protocolAlert.type, alertTemplate.protocolAlert.message);
         }
       }

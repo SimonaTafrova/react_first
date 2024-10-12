@@ -76,6 +76,11 @@ const Actions = ({ posts }) => {
     type: '',
   });
 
+  const typeData = [
+    { key: '1', value: user.rapidInsulin == null ? 'Please type in insulin type in profile' : user.rapidInsulin},
+    { key: '2', value: user.slowInsulin == null ? 'Please type in insulin type in profile' : user.slowInsulin},
+  ];
+
   const quickActions = [
     { id: 'action1', label: 'Log Insulin', imageSource: require('../assets/images/insulin.png'), onPress: () => setInsulinModalVisible(true) },
     { id: 'action2', label: 'Start Sensor', imageSource: require('../assets/images/sensor.png'), onPress: () => {submitStartedSensor()} },
@@ -89,6 +94,9 @@ const Actions = ({ posts }) => {
   const submitInsulin = async () => {
     if (!form.type || !form.units) {
       return Alert.alert("Please provide all fields");
+    }
+    if(user.rapidInsulin == null || user.slowInsulin == null){
+      return Alert.alert("Please fill in the brands of insulin first!")
     }
 
     setUploading(true);

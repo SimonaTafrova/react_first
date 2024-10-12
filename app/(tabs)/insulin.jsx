@@ -13,6 +13,8 @@ const Insulin = () => {
   const { data: posts, refetch, error } = useAppwrite(getLastTenInsulinLogs);
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useGlobalContext();
+  const fast = user.rapidInsulin;
+  const slow = user.slowInsulin;
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -50,7 +52,7 @@ const Insulin = () => {
        renderItem={({ item }) => (
         <View className="bg-secondary-200 mt-2 mb-2 rounded-xl min-h-[62px] p-3">
         <InfoBox
-          textcontent={item.type == 1 ? `NovoRapid - ${item.units} units` : `Levemir - ${item.units} units`}
+          textcontent={item.type == 1 ? `${fast}  - ${item.units} units` : `${slow} - ${item.units} units`}
           
           date={formatTime(item.time)}
           imagesource={images.insulin}
