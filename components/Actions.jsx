@@ -77,8 +77,8 @@ const Actions = ({ posts }) => {
   });
 
   const typeData = [
-    { key: '1', value: user.rapidInsulin },
-    { key: '2', value: user.slowInsulin },
+    { key: '1', value: user.rapidInsulin == null ? 'Please type in insulin type in profile' : user.rapidInsulin},
+    { key: '2', value: user.slowInsulin == null ? 'Please type in insulin type in profile' : user.slowInsulin},
   ];
 
   const quickActions = [
@@ -94,6 +94,9 @@ const Actions = ({ posts }) => {
   const submitInsulin = async () => {
     if (!form.type || !form.units) {
       return Alert.alert("Please provide all fields");
+    }
+    if(user.rapidInsulin == null || user.slowInsulin == null){
+      return Alert.alert("Please fill in the brands of insulin first!")
     }
 
     setUploading(true);

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import CustomButton from '../../components/CustomButton'; // Assuming you have a CustomButton component
-import { setInsulinTypes, getCurrentUser } from '../../lib/appwrite';
+import { setInsulinTypes, getCurrentUser, updatePassword, setUsername, updateEmail } from '../../lib/appwrite';
 
 const StaticQuickActionButton = ({ onPress, imageSource, label }) => (
   <View className="w-[48%] mb-5">
@@ -49,10 +49,13 @@ const Profile = () => {
 
   const handleSubmit = (type) => {
     // Add password verification for sensitive changes
-    if (!formData.currentPassword && type != 'insulin') {
-      Alert.alert('Error', 'Please enter your current password to verify.');
-      return;
+    if(type == 'email' || type == 'password'){
+      if (!formData.currentPassword ) {
+        Alert.alert('Error', 'Please enter your current password to verify.');
+        return;
+      }
     }
+  
 
     // Handle submit logic for each modal
     switch (type) {
@@ -62,16 +65,19 @@ const Profile = () => {
         break;
       case 'email':
         Alert.alert('Success', `Email Changed to: ${formData.email}`);
+        submitEmailUpdate(formData.email, formData.currentPassword);
         break;
       case 'password':
         if (formData.password === formData.confirmPassword) {
           Alert.alert('Success', `Password changed`);
+          submitPasswordUpdate(formData.password, formData.currentPassword);
         } else {
           Alert.alert('Error', 'Passwords do not match');
         }
         break;
       case 'username':
         Alert.alert('Success', `Username Changed to: ${formData.username}`);
+        submitUsernameUpdate(formData.username)
         break;
       default:
         break;
@@ -96,6 +102,9 @@ const Profile = () => {
     }
 
   }
+
+ 
+
 
   const quickActions = [
     { id: 'action1', label: 'Set Insulin Types', imageSource: require('../../assets/images/insulin.png'), modal: 'insulinModal' },
@@ -259,14 +268,7 @@ const Profile = () => {
             value={formData.username}
             onChangeText={(text) => handleInputChange('username', text)}
           />
-          <TextInput
-            className="border bg-primary border-secondary-200 rounded p-3 mb-3 text-white"
-            placeholder="Current Password"
-            placeholderTextColor="#FFFFFF" 
-            secureTextEntry={true}
-            value={formData.currentPassword}
-            onChangeText={(text) => handleInputChange('currentPassword', text)}
-          />
+     
           <CustomButton title="Submit" handlePress={() => handleSubmit('username')} />
         </View>
       </TouchableWithoutFeedback>
