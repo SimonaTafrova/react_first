@@ -3,7 +3,6 @@ import {Tabs, Redirect} from 'expo-router'
 import { icons } from "../../constants";
 import { getAllAlerts } from '../../lib/appwrite';
 import { useGlobalContext } from '../../context/GlobalProvider';
-import useAppwrite from '../../lib/useAppwrite';
 import {useState, useEffect} from 'react'
 
 
