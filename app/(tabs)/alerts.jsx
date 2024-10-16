@@ -19,7 +19,7 @@ const Alerts = () => {
 
 
   const countOfSensors = user.sensors;
-  const [isCreatingAlert, setIsCreatingAlert] = useState(false); // Track alert creation status
+  const [isCreatingAlert, setIsCreatingAlert] = useState(false); 
 
   const formatTime = (time) => {
     let date = new Date(time);
@@ -31,15 +31,13 @@ const Alerts = () => {
   }
 
 
-  // Helper function to check if an alert already exists in the database
   const doesAlertExist = async (alertType) => {
     const existingAlert = await searchAlerts(alertType);
     return existingAlert.length > 0;
   };
 
-  // Debounced function to create an alert
   const createAlertDebounced = async (type, message) => {
-    if (isCreatingAlert) return; // Prevent concurrent alert creations
+    if (isCreatingAlert) return; 
 
     setIsCreatingAlert(true);
     try {
@@ -54,14 +52,14 @@ const Alerts = () => {
     }
   };
 
-  // Function to handle sensor alerts
+  
   const runSensorAlert = async () => {
     if (countOfSensors <= 2) {
       await createAlertDebounced(alertTemplate.sensorAlert.type, alertTemplate.sensorAlert.message);
     }
   };
 
-  // Function to handle prescription alerts
+  
   const runPrescriptionAlerts = async () => {
     try {
       const [monthlyPrescription, quarterlyPrescription, protocolPrescription] = await Promise.all([
@@ -72,7 +70,7 @@ const Alerts = () => {
 
       const currentDay = new Date();
 
-      // Monthly prescription check
+      
       if (monthlyPrescription[0]) {
         const lastDate = new Date(monthlyPrescription[0].time);
         if (Math.floor((currentDay - lastDate) / (24 * 3600 * 1000)) >= 28) {
@@ -80,7 +78,7 @@ const Alerts = () => {
         }
       }
 
-      // Quarterly prescription check
+      
       if (quarterlyPrescription[0]) {
         const quarterlyDate = new Date(quarterlyPrescription[0].time);
         if (Math.floor((currentDay - quarterlyDate) / (24 * 3600 * 1000)) >=85) {
@@ -88,7 +86,7 @@ const Alerts = () => {
         }
       }
 
-      // Protocol prescription check
+      
       if (protocolPrescription[0]) {
         const protocolDate = new Date(protocolPrescription[0].time);
         if (Math.floor((currentDay - protocolDate) / (24 * 3600 * 1000)) >= 182) {
@@ -126,7 +124,7 @@ const Alerts = () => {
   const handleDeleteAlert = async (alertId) => {
     try {
       await deleteAlert(alertId);
-      await refetch(); // Refresh the list after deletion
+      await refetch(); 
     } catch (error) {
       Alert.alert('Error', error.message);
     }
@@ -135,7 +133,7 @@ const Alerts = () => {
   return (
     <SafeAreaView className="flex-1 bg-black">
       <FlatList
-        data={posts} // Display all alerts directly without filtering
+        data={posts} 
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => (
           <View className="bg-secondary-200 mt-2 mb-2 rounded-xl min-h-[62px] p-4 flex-row justify-between items-center">
