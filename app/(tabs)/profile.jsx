@@ -118,7 +118,20 @@ const Profile = () => {
     }
   }
 
-
+  const submitEmailUpdate = async(email, password) => {
+    try {
+      await updateEmail(email,password);
+       const result = await getCurrentUser();
+       setUser(result);
+     
+    } catch (error) {
+      Alert.alert('Error', error.message)
+      
+    } finally {
+      setFormData({ email : '' }, {currentPassword : ''});
+      setIsSubmitting(false);
+    }
+  }
 
    const submitUsernameUpdate = async(username) => {
     try {
