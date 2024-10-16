@@ -124,7 +124,7 @@ const Actions = ({ posts }) => {
       await updateSensorsCount();
       const result = await getCurrentUser();
       if(result.sensors <= 2){
-        await createAlert(alertTemplates.sensorAlert.type,alertTemplates.sensorAlert.message)
+        await createAlert(alertTemplates.sensorAlert.type,alertTemplates.sensorAlert.message,user.$id, new Date())
         setSensorAlerts(true)
       }else{
         setSensorAlerts(false)

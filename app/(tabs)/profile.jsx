@@ -118,7 +118,23 @@ const Profile = () => {
     }
   }
 
- 
+
+
+   const submitUsernameUpdate = async(username) => {
+    try {
+      await setUsername(username);
+       const result = await getCurrentUser();
+       setUser(result);
+     
+    } catch (error) {
+      Alert.alert('Error', error.message)
+      
+    } finally {
+      setFormData({ username : '' });
+      setIsSubmitting(false);
+    }
+  }
+
 
 
   const quickActions = [
