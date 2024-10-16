@@ -1,7 +1,6 @@
 import { FlatList, Image, Text, View, RefreshControl, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { images } from '../../constants';
 import SearchInput from '../../components/SearchInput';
 import Actions from '../../components/Actions';
 import EmptyState from '../../components/EmptyState';
@@ -9,7 +8,6 @@ import VideoCard from '../../components/VideoCard';
 import useAppwrite from "../../lib/useAppwrite";
 import { getAllPosts , getAllAlerts, signOut} from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
-import CustomButton from '../../components/CustomButton';
 import { icons } from "../../constants";
 import { router } from "expo-router";
 
