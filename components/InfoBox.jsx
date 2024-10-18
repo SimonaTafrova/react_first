@@ -1,5 +1,5 @@
 import { View, Text, Image } from "react-native";
-import { images } from "../constants";
+
 
 const InfoBox = ({ textcontent, date, containerStyles, titleStyles, imagesource }) => {
   return (
