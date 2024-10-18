@@ -1,12 +1,11 @@
-import { ScrollView, StyleSheet, Text, View, Alert } from 'react-native'
+import { ScrollView, Text, View, Alert } from 'react-native'
 import { React, useState } from 'react'
 
-import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Image, TouchableOpacity } from "react-native";
+import { Image,  } from "react-native";
 
 import { images } from "../../constants";
-import useAppwrite from "../../lib/useAppwrite";
+
 
 import { useGlobalContext } from "../../context/GlobalProvider";
 import FormField from '../../components/FormField';
