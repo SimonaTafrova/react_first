@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
-import YoutubePlayer from "react-native-youtube-iframe";  // Import the YouTube player
+import YoutubePlayer from "react-native-youtube-iframe";
 import { icons } from "../constants";
 
-// Helper function to extract video ID from YouTube URL
+
 const extractYoutubeVideoId = (url) => {
   const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/;
   const matches = url.match(regex);
@@ -13,7 +13,6 @@ const extractYoutubeVideoId = (url) => {
 const VideoCard = ({ title, thumbnail, video }) => {
   const [play, setPlay] = useState(false);
 
-  // Extract YouTube video ID from the URL
   const videoId = extractYoutubeVideoId(video);
 
   return (
