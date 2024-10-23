@@ -3,7 +3,8 @@ import {Tabs, Redirect} from 'expo-router'
 import { icons } from "../../constants";
 import { getAllAlerts } from '../../lib/appwrite';
 import { useGlobalContext } from '../../context/GlobalProvider';
-import {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react';
+import { alertTemplates } from '../../lib/tools';
 
 
 
@@ -36,6 +37,13 @@ const TabsLayout = () => {
              
               
               if (posts.length > 0) {
+                for(let i=0; i < posts.length; i++){
+                    if(posts[i].type == alertTemplates.sensorAlert){
+                        setSensorAlerts(true);
+                    } else {
+                        setPrescriptionAlerts(true);
+                    }
+                }
                 setSensorAlerts(true);   
               } else {
                 setSensorAlerts(false); 
