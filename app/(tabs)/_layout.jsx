@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View , Image} from 'react-native'
-import {Tabs, Redirect} from 'expo-router'
+import { Text, View , Image} from 'react-native'
+import {Tabs} from 'expo-router'
 import { icons } from "../../constants";
 import { getAllAlerts } from '../../lib/appwrite';
 import { useGlobalContext } from '../../context/GlobalProvider';
-import {useState, useEffect} from 'react';
+import { useEffect} from 'react';
 import { alertTemplates } from '../../lib/tools';
 
 
