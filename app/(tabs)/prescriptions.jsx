@@ -59,7 +59,7 @@ const Prescriptions = () => {
                   {user?.username}
                 </Text>
                 <Text className="text-2xl font-semibold text-secondary">
-                  Here are the dates of your 5 or less most recent prescription collections
+                  Here are the dates of your 5 or less most recent prescription collections:
                 </Text>
               </View>
             </View>
