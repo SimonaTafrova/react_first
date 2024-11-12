@@ -70,7 +70,7 @@ const Insulin = () => {
                   {user?.username}
                 </Text>
                 <Text className="text-2xl font-semibold text-secondary">
-                  Here are your 10 most recent insulin insertions
+                  Here are your 10 most recent insulin insertions:
                 </Text>
               </View>
             </View>

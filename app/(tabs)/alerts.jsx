@@ -152,7 +152,7 @@ const Alerts = () => {
             <View className="flex flex-row justify-between items-start mb-6">
               <View>
                 <Text className="font-medium text-xl text-gray-100">{user?.username}</Text>
-                <Text className="text-2xl font-semibold text-secondary">Here is a list of your active alerts</Text>
+                <Text className="text-2xl font-semibold text-secondary">Here is a list of your active alerts:</Text>
               </View>
             </View>
           </View>
