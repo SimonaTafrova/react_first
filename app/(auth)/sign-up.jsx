@@ -47,7 +47,7 @@ const SignUp = () => {
       <ScrollView>
         <View className="w-full justify-center min-h-[85vh] px-4 my-6">
           <Image source={images.logo} resizeMode='contain' className="w-[115px] h-[35px]"/>
-          <Text className="text-2xl text-white text-semibold mt-10 font-psemibold"> Sign up to Aura</Text>
+          <Text className="text-2xl text-white text-semibold mt-10 font-psemibold"> Sign up to myMedical</Text>
           <FormField
             title="Username"
             value= {form.username}
@@ -82,7 +82,7 @@ const SignUp = () => {
 
           <View className="justify-center pt-5 flex-row gap-2">
             <Text className="text-lg text-gray-100 font-pregular">Already registered?</Text>
-            <Link href="/sign-in" className='text-lg font-psemibold text-secondary-100'>Sign in</Link>
+            <Link href="/sign-in" className='text-lg font-psemibold text-secondary-100'>Sign in now!</Link>
           
 
           </View>
