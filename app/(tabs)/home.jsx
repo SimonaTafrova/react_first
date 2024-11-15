@@ -87,7 +87,7 @@ const Home = () => {
             </View>
             <SearchInput />
             <View style={styles.actionsContainer}>
-              <Text style={styles.chooseText}>Choose what you want to update</Text>
+              <Text style={styles.chooseText}>What would you like to do? </Text>
               <Actions posts={[]} />
             </View>
           
