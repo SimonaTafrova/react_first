@@ -93,7 +93,7 @@ const Actions = ({ posts }) => {
   // Debugging submit functions
   const submitInsulin = async () => {
     if (!form.type || !form.units) {
-      return Alert.alert("Please provide all fields");
+      return Alert.alert("Please provide all fields!");
     }
     if(user.rapidInsulin == null || user.slowInsulin == null){
       return Alert.alert("Please fill in the brands of insulin first!")
@@ -108,7 +108,7 @@ const Actions = ({ posts }) => {
         time: new Date(),
       });
 
-      Alert.alert("Success", "Insulin log recorded successfully");
+      Alert.alert("Success", "Insulin log recorded successfully!");
       router.push("/home");
     } catch (error) {
       Alert.alert("Error", error.message);
@@ -130,7 +130,7 @@ const Actions = ({ posts }) => {
         setSensorAlerts(false)
       }
       setUser(result);
-      Alert.alert("Success", "Sensors started successfully")
+      Alert.alert("Success", "Sensors started successfully!")
     }catch (error) {
       Alert.alert("Error", error.message);
     }
@@ -138,7 +138,7 @@ const Actions = ({ posts }) => {
 
   const submitPrescription = async () => {
     if (!prescriptionForm.time) {
-      return Alert.alert("Please provide all fields");
+      return Alert.alert("Please provide all fields!");
     }
 
     setUploading(true);
@@ -149,7 +149,7 @@ const Actions = ({ posts }) => {
         userId: user.$id,
       });
 
-      Alert.alert("Success", "Prescription log recorded successfully");
+      Alert.alert("Success", "Prescription log recorded successfully!");
       handleAlert(prescriptionForm.type);
       setPrescriptionAlerts(false)
       router.push("/home");
