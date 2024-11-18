@@ -74,7 +74,7 @@ const Home = () => {
 
               <View className="mt-1.5">
               <TouchableOpacity
-              onPress= {logout}
+              onPress= {logout()}
               className="flex w-full items-end mb-10"
             >
               <Image
