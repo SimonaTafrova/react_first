@@ -29,6 +29,7 @@ const SignIn = () => {
       const result = await getCurrentUser();
       console.log(result)
       setUser(result);
+      console.log(setUser(result))
       console.log(user)
       setIsLogged(true);
       router.replace('/home')  
