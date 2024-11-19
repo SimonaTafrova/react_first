@@ -26,7 +26,7 @@ const Home = () => {
     setUser(null);
     setIsLogged(false);
 
-    router.replace("/sign-in");
+    router.replace('/sign-in');
   };
 
 
@@ -74,7 +74,7 @@ const Home = () => {
 
               <View className="mt-1.5">
               <TouchableOpacity
-              onPress= {logout()}
+              onPress= {logout}
               className="flex w-full items-end mb-10"
             >
               <Image
