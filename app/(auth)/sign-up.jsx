@@ -17,6 +17,7 @@ const SignUp = () => {
     username: '',
     email: '',
     password: '',
+    confirmPassword: '',
     
   })
   const submit = async () => {
@@ -71,6 +72,14 @@ const SignUp = () => {
             value= {form.password}
             handleChangeText = {(e) => setform({ ...form,
               password: e
+            })}
+            otherStyles="mt-7"
+          />
+           <FormField
+            title="Confirm password"
+            value= {form.confirmPassword}
+            handleChangeText = {(e) => setform({ ...form,
+              confirmPassword: e
             })}
             otherStyles="mt-7"
           />
