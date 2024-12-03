@@ -121,14 +121,7 @@ const Alerts = () => {
     setRefreshing(false);
   };
 
-  const handleDeleteAlert = async (alertId) => {
-    try {
-      await deleteAlert(alertId);
-      await refetch(); 
-    } catch (error) {
-      Alert.alert('Error', error.message);
-    }
-  };
+
 
   return (
     <SafeAreaView className="flex-1 bg-black">
