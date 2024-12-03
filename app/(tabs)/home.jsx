@@ -17,7 +17,7 @@ const Home = () => {
   const { data: posts, refetch, error } = useAppwrite(getAllPosts);
   
   const [refreshing, setRefreshing] = useState(false);
-  const { user, setUser, setIsLogged, isLogged} = useGlobalContext();
+  const { user, isLogged} = useGlobalContext();
  
   
 
