@@ -6,10 +6,9 @@ import Actions from '../../components/Actions';
 import EmptyState from '../../components/EmptyState';
 import VideoCard from '../../components/VideoCard';
 import useAppwrite from "../../lib/useAppwrite";
-import { getAllPosts , signOut} from "../../lib/appwrite";
+import { getAllPosts } from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
-import { icons } from "../../constants";
-import { router } from "expo-router";
+
 
 
 
@@ -18,16 +17,9 @@ const Home = () => {
   const { data: posts, refetch, error } = useAppwrite(getAllPosts);
   
   const [refreshing, setRefreshing] = useState(false);
-  const { user, setUser, setIsLogged} = useGlobalContext();
+  const { user, setUser, setIsLogged, isLogged} = useGlobalContext();
  
   
-  const logout = async () => {
-    await signOut();
-    setUser(null);
-    setIsLogged(false);
-
-    router.replace('/sign-in');
-  };
 
 
 
@@ -47,6 +39,7 @@ const Home = () => {
     setRefreshing(false);
   };
 
+  if (isLogged == false) return null;
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -72,18 +65,7 @@ const Home = () => {
                 </Text>
               </View>
 
-              <View className="mt-1.5">
-              <TouchableOpacity
-              onPress= {logout}
-              className="flex w-full items-end mb-10"
-            >
-              <Image
-                source={icons.logout}
-                resizeMode="contain"
-                className="w-6 h-6"
-              />
-            </TouchableOpacity>
-              </View>
+           
             </View>
             <SearchInput />
             <View style={styles.actionsContainer}>

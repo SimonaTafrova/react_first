@@ -3,7 +3,9 @@ import React, { useState } from 'react';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import CustomButton from '../../components/CustomButton'; // Assuming you have a CustomButton component
-import { setInsulinTypes, getCurrentUser, updatePassword, setUsername, updateEmail } from '../../lib/appwrite';
+import { setInsulinTypes, getCurrentUser, updatePassword, setUsername, updateEmail, signOut } from '../../lib/appwrite';
+import { icons } from "../../constants";
+import { router } from "expo-router";
 
 const StaticQuickActionButton = ({ onPress, imageSource, label }) => (
   <View className="w-[48%] mb-5">
@@ -15,7 +17,7 @@ const StaticQuickActionButton = ({ onPress, imageSource, label }) => (
 );
 
 const Profile = () => {
-  const { user, setUser } = useGlobalContext();
+  const { user, setUser, setIsLogged } = useGlobalContext();
   const [modals, setModals] = useState({
     insulinModal: false,
     emailModal: false,
@@ -32,6 +34,13 @@ const Profile = () => {
     currentPassword: '', // Add this field for verification
     username: '',
   });
+  
+  const logout = async () => {
+    await signOut();
+    setUser(null);
+    setIsLogged(false);
+    router.replace("/sign-in", { reset: true });
+  };
 
   const toggleModal = (modal) => {
     setModals((prevState) => ({
@@ -168,6 +177,19 @@ const Profile = () => {
             What would you like to do?
           </Text>
         </View>
+
+        <View className="mt-1.5">
+              <TouchableOpacity
+              onPress= {logout}
+              className="flex w-full items-end mb-10"
+            >
+              <Image
+                source={icons.logout}
+                resizeMode="contain"
+                className="w-6 h-6"
+              />
+            </TouchableOpacity>
+              </View>
 
         {/* Quick Actions in 2 rows */}
         <View className="flex-row flex-wrap justify-between">
