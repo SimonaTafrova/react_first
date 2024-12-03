@@ -2,7 +2,7 @@ import { ScrollView, Text, View, TouchableOpacity, Image, Modal, TextInput, Aler
 import React, { useState } from 'react';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "../../context/GlobalProvider";
-import CustomButton from '../../components/CustomButton'; // Assuming you have a CustomButton component
+import CustomButton from '../../components/CustomButton';
 import { setInsulinTypes, getCurrentUser, updatePassword, setUsername, updateEmail, signOut } from '../../lib/appwrite';
 import { icons } from "../../constants";
 import { router } from "expo-router";
@@ -31,7 +31,7 @@ const Profile = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    currentPassword: '', // Add this field for verification
+    currentPassword: '', 
     username: '',
   });
   
@@ -57,7 +57,7 @@ const Profile = () => {
   };
 
   const handleSubmit = (type) => {
-    // Add password verification for sensitive changes
+    
     if(type == 'email' || type == 'password'){
       if (!formData.currentPassword ) {
         Alert.alert('Error', 'Please enter your current password to verify.');
@@ -66,7 +66,7 @@ const Profile = () => {
     }
   
 
-    // Handle submit logic for each modal
+    
     switch (type) {
       case 'insulin':
         Alert.alert('Success', `Insulin Type: ${formData.rapidInsulin}, Units: ${formData.slowInsulin}`);
@@ -191,7 +191,7 @@ const Profile = () => {
             </TouchableOpacity>
               </View>
 
-        {/* Quick Actions in 2 rows */}
+       
         <View className="flex-row flex-wrap justify-between">
           {quickActions.map((action) => (
             <StaticQuickActionButton
@@ -203,7 +203,7 @@ const Profile = () => {
           ))}
         </View>
 
-        {/* Insulin Modal */}
+      
         <Modal
           animationType="fade"
           transparent={true}
@@ -236,7 +236,6 @@ const Profile = () => {
           </TouchableWithoutFeedback>
         </Modal>
 
-        {/* Email Modal */}
         <Modal
           animationType="fade"
           transparent={true}
@@ -270,7 +269,6 @@ const Profile = () => {
           </TouchableWithoutFeedback>
         </Modal>
 
-        {/* Password Modal */}
         <Modal
           animationType="fade"
           transparent={true}
@@ -313,8 +311,6 @@ const Profile = () => {
           </TouchableWithoutFeedback>
         </Modal>
 
-        {/* Username Modal */}
-{/* Username Modal */}
 <Modal
   animationType="fade"
   transparent={true}
@@ -322,7 +318,7 @@ const Profile = () => {
   onRequestClose={() => toggleModal('usernameModal')}
 >
   <TouchableWithoutFeedback onPress={() => toggleModal('usernameModal')}>
-    {/* Wrap everything inside a single parent View */}
+  
     <View className="flex-1 justify-center items-center bg-black bg-opacity-60">
       <TouchableWithoutFeedback>
         <View className="bg-primary p-6 rounded-lg w-[90%] border-4 border-secondary-200">
