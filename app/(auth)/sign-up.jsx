@@ -22,12 +22,12 @@ const SignUp = () => {
   })
   const submit = async () => {
     if(!form.username || !form.email || !form.password || !form.confirmPassword){
-      Alert.alert('Error', 'All fields are required!')
+      Alert.alert('Error', 'All fields are mandatory!')
       return;
     }
 
     if(form.password !== form.confirmPassword){
-      Alert.alert('Error', 'Passwords do not match!')
+      Alert.alert('Error', 'Password mismatch!')
     return;
     }
 
