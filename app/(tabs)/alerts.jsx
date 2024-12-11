@@ -150,7 +150,7 @@ const Alerts = () => {
             </View>
           </View>
         )}
-        ListEmptyComponent={() => <EmptyState title="There are no active alerts at the moment!" />}
+        ListEmptyComponent={() => <EmptyState title="Relax! There are no active alerts at the moment!" />}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       />
     </SafeAreaView>
