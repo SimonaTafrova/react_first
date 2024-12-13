@@ -3,14 +3,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useGlobalContext } from "../../context/GlobalProvider";
 import EmptyState from '../../components/EmptyState';
 import InfoBox from '../../components/InfoBox';
-import {getLastTenInsulinLogs} from '../../lib/appwrite'
+import {getLastFifteenInsulinLogs} from '../../lib/appwrite'
 import useAppwrite from "../../lib/useAppwrite";
 import { useState } from 'react';
 import { images } from '../../constants';
 
 const Insulin = () => {
   
-  const { data: posts, refetch, error } = useAppwrite(getLastTenInsulinLogs);
+  const { data: posts, refetch, error } = useAppwrite(getLastFifteenInsulinLogs);
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useGlobalContext();
   const fast = user.rapidInsulin;
